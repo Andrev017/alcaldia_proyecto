@@ -1,0 +1,95 @@
+<form [formGroup]="reactiveform" (ngSubmit)="updateInscripcion()">
+    <!-- <div class="modal-header">
+        <h5 *ngIf="tipo=='approve'"> Aprobar inscripción</h5>
+        <h5 *ngIf="tipo=='asisttend'"> Aprobar asistencia</h5>
+        <h5 *ngIf="tipo=='certificate'"> Aprobar certificado</h5>
+
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+    </div> -->
+    <div class="card">
+        <!-- approved -->
+        <div class="field" *ngIf="tipo==='approved'" >
+            <label for=""> <p> Se habilitara en el curso <strong> {{inscription.incripcion_capacitacion.capacitacion_curso.nombre}} </strong> a nombre de funcionario <strong> {{inscription.inscripcion_empleado.nombre }} {{inscription.inscripcion_empleado.paterno }} {{inscription.inscripcion_empleado.materno }} </strong> ? </p></label>
+        </div>
+
+        <div class="field" *ngIf="tipo==='approved'" >
+            <div class="grid formgrid">
+				<div class="col-12 md:col-4">
+					<div class="field-radiobutton">
+						<p-radioButton name="estado" value="APROBADO" id="estado1" formControlName="estado"></p-radioButton>
+						<label for="city1">SI</label>
+					</div>
+				</div>
+				<div class="col-12 md:col-4">
+					<div class="field-radiobutton">
+						<p-radioButton name="estado" value="RECHAZADO"				   id="estado2" formControlName="estado"></p-radioButton>
+						<label for="city2">NO</label>
+					</div>
+				</div>
+			</div>
+            <small class="ng-dirty ng-invalid" *ngIf="shouldShowError('estado')"  >{{ getErrorMessage('estado') }}</small>
+        </div>
+        <div class="field" *ngIf="tipo==='approved'" >
+            <label for="exampleInput1" >Motivo</label>
+            <input class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" required autofocus  formControlName="motivo_rechazo" >
+            <small class="ng-dirty ng-invalid" *ngIf="shouldShowError('motivo_rechazo')"  >{{ getErrorMessage('motivo_rechazo') }}</small>
+        </div>
+
+        <!-- Asisttende -->
+        <div class="field" *ngIf="tipo==='asisttend'" >
+            <label for=""> <p> El <strong> {{inscription.inscripcion_empleado.nombre }} {{inscription.inscripcion_empleado.paterno }} {{inscription.inscripcion_empleado.materno }} </strong> asistio al curso <strong> {{inscription.incripcion_capacitacion.capacitacion_curso.nombre}} </strong> ? </p></label>
+        </div>
+
+        <div class="field" *ngIf="tipo==='asisttend'" >
+            <div class="grid formgrid">
+				<div class="col-12 md:col-4">
+					<div class="field-radiobutton">
+						<p-radioButton name="asistencia" value="SI" id="cert1" formControlName="asistencia"></p-radioButton >
+						<label for="city1">SI</label>
+					</div>
+				</div>
+				<div class="col-12 md:col-4">
+					<div class="field-radiobutton">
+						<p-radioButton name="asistencia" value="NO" 		   id="city2" formControlName="asistencia"></p-radioButton>
+						<label for="city2">NO</label>
+					</div>
+				</div>
+                <div class="col-12 md:col-4">
+					<div class="field-radiobutton">
+						<p-radioButton name="asistencia" value="JU" 		   id="city3" formControlName="asistencia"></p-radioButton>
+						<label for="city3">CON JUSTIFICACIÓN</label>
+					</div>
+				</div>
+			</div>
+        </div>
+
+        <!-- Certificate -->
+        <div class="field" *ngIf="tipo==='certificate'" >
+            <label for=""> <p> El <strong> {{inscription.inscripcion_empleado.nombre }} {{inscription.inscripcion_empleado.paterno }} {{inscription.inscripcion_empleado.materno }} </strong> asistio al curso <strong> {{inscription.incripcion_capacitacion.capacitacion_curso.nombre}} </strong> GENERAR CERTIFICADO ? </p></label>
+        </div>
+
+        <div class="row" *ngIf="tipo==='certificate'" >
+            <div class="grid formgrid">
+				<div class="col-12 md:col-4">
+					<div class="field-radiobutton">
+						<p-radioButton name="certificado" value="SI" id="cert1" formControlName="certificado"></p-radioButton>
+						<label for="city1">SI</label>
+					</div>
+				</div>
+				<div class="col-12 md:col-4">
+					<div class="field-radiobutton">
+						<p-radioButton name="certificado" value="NO"  id="city2" formControlName="certificado"></p-radioButton>
+						<label for="city2">NO</label>
+					</div>
+				</div>
+			</div>
+
+        </div>
+        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="closeDialog()" ></button>
+        <button type="submit" pButton pRipple label="Guardar" icon="pi pi-check" class="p-button-text"></button>
+
+    </div>
+
+</form>

@@ -1,0 +1,80 @@
+<form [formGroup]="reactiveform" (ngSubmit)="SaveTraing()">
+    <!-- <div >
+        <h5 *ngIf="!isAddMode">Registro Curso</h5>
+        <h5 *ngIf="isAddMode">Editar Curso</h5>
+
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+    </div> -->
+    <div class="grid">
+        <div class="col-12">
+            <div class="card">
+                <div class="p-fluid p-formgrid grid">
+                    <div class="field col-12 md:col-4">
+                        <label for="yearpicker">Gestión</label>
+                        <p-calendar view="year" dateFormat="yy" inputId="yearpicker"  formControlName="gestion" [(ngModel)]="selectedDate" ></p-calendar>
+<!-- 
+                        <small *ngIf="shouldShowError('gestion')" class="text-danger" >{{ getErrorMessage('gestion') }}</small> -->
+                    </div>
+                    
+                    <div class="field col-12 md:col-4">
+                        <label for="ch" >Carga Horaria</label>
+                        <input id="ch" type="text" pInputText formControlName="carga_horaria" />
+                        <small class="p-error" *ngIf="shouldShowError('carga_horaria')"  >{{ getErrorMessage('carga_horaria') }}</small>
+                    </div>
+                    <div class="field col-12 md:col-4">
+                        <label for="cupo" >Cupo estudiantes</label>
+                        <input id="cupo" type="text" pInputText formControlName="cupo" />
+                        <small class="p-error" *ngIf="shouldShowError('cupo')"  >{{ getErrorMessage('cupo') }}</small>
+                    </div>
+                                    
+                    <div class="field col-12 md:col-6">
+                        <label for="fi">Fechas Inicio - Fecha Fin:</label>
+                        <p-calendar [showIcon]="true" inputId="fi" dateFormat="dd/mm/yy"  formControlName="fecha" selectionMode="range" placeholder="01/01/2023 - 30/03/2023" ></p-calendar>
+                        <small class="p-error" *ngIf="shouldShowError('fecha')" >{{ getErrorMessage('fecha') }}</small>
+                    </div>
+                    <div class="field col-12 md:col-3">
+                            <label for="hi" >Horario Inicio</label>
+                            <!-- <input type="text"  pInputText formControlName="horario_inicio"> -->
+                            <p-calendar inputId="hi" [showIcon]="true" [timeOnly]="true" [showTime]="true" [showSeconds]="true"  formControlName="horario_inicio" placeholder="20:30:00">                            
+                            </p-calendar>                            
+                            <small class="p-error" *ngIf="shouldShowError('horario_inicio')"  >{{ getErrorMessage('horario_inicio') }}</small>
+                    </div>
+                    <div class="field col-12 md:col-3">
+                            <label for="hf" >Horario Fin</label>
+                            <p-calendar inputId="hf" [showIcon]="true" [timeOnly]="true" [showTime]="true" [showSeconds]="true" formControlName="horario_fin" placeholder="22:30:00">                                  
+                            </p-calendar>
+                            <small class="p-error" *ngIf="shouldShowError('horario_fin')"  >{{ getErrorMessage('horario_fin') }}</small>
+                    </div>
+                    
+                    <div class="field col-12 md:col-6">
+                        <label for="dir" >Dirección</label>
+                        <input id="dir" type="text" pInputText formControlName="direccion">
+                        <small class="p-error" *ngIf="shouldShowError('direccion')"  >{{ getErrorMessage('direccion') }}</small>
+                    </div>
+
+                    <div class="field col-12 md:col-6">
+                        <label for="cap" >Capacitador</label>
+                        <input id="cap" type="text" pInputText formControlName="capacitador">
+                        <small class="p-error" *ngIf="shouldShowError('capacitador')"  >{{ getErrorMessage('capacitador') }}</small>
+                    </div>
+                    
+                    <div class="field col-12 md:col-9">
+                        <label for="io" >Institución Organizadora</label>
+                        <input id="io" type="text"  pInputText formControlName="inst_organizadora">
+                        <small class="p-error" *ngIf="shouldShowError('inst_organizadora')"  >{{ getErrorMessage('inst_organizadora') }}</small>
+                    </div>
+                    <div class="field col-12 md:col-3">
+                        <label >visible</label>
+                        <p-dropdown [options]='[{name: "SI"}, {name: "NO"}]'   placeholder="Select a Language"  optionLabel="name"  [showClear]="true" formControlName="visible" optionValue="name"></p-dropdown>                        
+                        <small class="p-error" *ngIf="shouldShowError('visible')"  >{{ getErrorMessage('visible') }}</small>
+            
+                    </div>
+                </div>
+            </div>
+        </div>
+            <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="closeDialog()" ></button>
+            <button type="submit" pButton pRipple label="Guardar" icon="pi pi-check" class="p-button-text"></button>
+    </div>
+</form>

@@ -1,0 +1,29 @@
+<div class="titulo-page">
+  <div class="title-container">
+    <h1 class="title">{{ title }}</h1>
+  </div>
+  <div class="subtitle-container">
+    <div class="subtitle">{{ subtitle }}</div>
+  </div>
+</div>
+<div class="grid">
+	<div class="col-12">
+        <!--<p-dialog header="Aclaración" [(visible)]="visible" [style]="{width: '40vw'}" *ngIf="uuidempleado ">
+            <p-messages severity="info">
+            <ng-template pTemplate>
+                <ul class="list-group list-group-flush ">
+                    <li class="list-group-item ">TODOS LOS SERVIDORES PÚBLICOS <strong>PROFESIONALES Y/O QUE CUMPLAN FUNCIONES DE AUDITORES GUBERNAMENTALES (AUDITORES, INGENIEROS, ABOGADOS, Y OTROS), DEBERAN ACUMULAR 40 HORAS DE CAPACITACION COMO MÍNIMO </strong>, DANDO MAYOR IMPORTANCIA AL ÁREA EN LA QUE DESEMPEÑA SUS FUNCIONES.</li>
+                    <li class="list-group-item">LOS SERVIDORES PÚBLICOS, EMPLEADOS O TRABAJADORES NO PROFESIONALES, QUE CUMPLEN FUNCIONES DE APOYO ADMINISTRATIVOS <strong>(SECRETARIAS, ADMINISTRADORES, Y OTROS) Y PERSONAL DE SERVICIO (MENSAJEROS, PORTEROS, Y OTROS AUXILIARES Y PERSONAL OPERATIVO EN GENERAL), TIENEN LA OBLIGACION DE ACUMULAR 20 HORAS DE CAPACITACION COMO MÍNIMO.</strong></li>
+                    <li class="list-group-item">LA DIRECCIÓN DE RECURSOS HUMANOS <strong>RECOMIENDA</strong> A USTED ADOPTAR LOS RECAUDOS Y/O MEDIDAS QUE EL CASO ACONSEJE A OBJETO DE <strong>CUMPLIR LO ESTIPULADO, ASI MISMO ENVIAR AL DEPARTAMENTO DE DESARROLLO DE PERSONAL Y SEGURIDAD INDUSTRIAL UBICADO EN OBRAS PUBLICAS UNA COPIA DEL CERTIFICADO DE CADA CAPACITACIÓN.</strong></li>
+                    <li class="list-group-item">El 50 %  DE LAS CAPACITACIONES DEBE SER EN SU ÁREA DE ESTUDIO</li>
+                    <li class="list-group-item">EL FUNCIONARIO SOLO PUEDE SOLICITAR LA INSCRIPCION DE TRES CURSOS AL AÑO.</li>
+                  </ul>
+            </ng-template>
+            </p-messages>
+        </p-dialog>-->
+
+        <app-capacitacion-list [codcurso] = "uuid" [idempleado] = "idempleado" [tipo]="tipo" *ngIf="isEmp === '' " ></app-capacitacion-list>
+        <app-capacitacion-emp [uuidempleado] = "uuidempleado"  *ngIf="isEmp === 'true' " ></app-capacitacion-emp>
+        <!-- <app-aclaratorio-capacitacion></app-aclaratorio-capacitacion> -->
+    </div>
+</div>

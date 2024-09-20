@@ -1,0 +1,48 @@
+<form [formGroup]="reactiveform" (ngSubmit)="SaveCurso()">
+    <!-- <div >
+        <h5 *ngIf="!isAddMode">Registro Curso</h5>
+        <h5 *ngIf="isAddMode">Editar Curso</h5>
+
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+    </div> -->
+    <div class="card">
+
+
+        <div class="field">
+            <label for="codigo">Codigo</label>
+            <input id="codigo" type="text"
+                class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
+                required autofocus [disabled]="true" value="{{codigoMax}}" />
+            <small class="p-error" *ngIf="shouldShowError('codigo')">{{ getErrorMessage('codigo') }}</small>
+        </div>
+
+        <div class="field">
+            <label for="nombre">Nombre</label>
+            <input id="nombre" type="text"
+                class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
+                required autofocus formControlName="nombre" />
+            <small class="p-error" *ngIf="shouldShowError('nombre')">{{ getErrorMessage('nombre') }}</small>
+        </div>
+
+        <div class="field">
+            <label for="contenido">Contenido</label>
+            <input id="contenido" type="text"
+                class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
+                pInputText formControlName="contenido" />
+            <small class="p-error" *ngIf="shouldShowError('contenido')">{{ getErrorMessage('caontenido') }}</small>
+        </div>
+        <div class="field">
+            <label for="dirigido">Dirigido</label>
+            <textarea id="dirigido" required rows="3" cols="20"
+                class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
+                formControlName="dirigido"></textarea>
+            <small class="p-error" *ngIf="shouldShowError('dirigido')">{{ getErrorMessage('dirigido') }}</small>
+        </div>
+
+        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text"
+            (click)="closeDialog()"></button>
+        <button type="submit" pButton pRipple label="Guardar" icon="pi pi-check" class="p-button-text"></button>
+    </div>
+</form>

@@ -1,0 +1,14 @@
+<div class="titulo-page">
+    <div class="title-container">
+        <h1 class="title">{{ title }}</h1>
+    </div>
+    <div class="subtitle-container">
+        <div class="subtitle">{{ subtitle }}</div>
+    </div>
+</div>
+<div class="grid">
+	<div class="col-12">
+        <app-inscripcion-list [uuidtraing] ="codTraing" *ngIf="isList === '' " ></app-inscripcion-list>
+        <app-inscripcion-emp [uuidtraing] ="codTraing" *ngIf="isList === 'true' "></app-inscripcion-emp>
+    </div>
+</div>

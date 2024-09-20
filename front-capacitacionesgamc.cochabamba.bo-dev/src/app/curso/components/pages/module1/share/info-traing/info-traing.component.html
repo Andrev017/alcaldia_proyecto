@@ -1,0 +1,25 @@
+
+    <!-- <div class="card" style="width: 60rem; "> -->
+    <div class="card" >
+        <div class="card-body">
+          <h4 class="card-title"> </h4>
+          
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item"><strong> Código: </strong> {{training?.codigo}}</li>
+            <li class="list-group-item"><strong> Detalle: </strong> {{training?.capacitacion_curso.nombre}} </li>
+            <li class="list-group-item"><strong> Fecha: </strong> {{training?.fecha_inicio | date:'dd/MM/yyyy'}} - {{training?.fecha_fin | date:'dd/MM/yyyy'}} {{training?.horario_inicio}} - {{training?.horario_fin}} </li>
+            <li class="list-group-item"><strong> Dirección: </strong> {{training?.direccion}}</li>
+            <li class="list-group-item"><strong> Capacitador: </strong> {{training?.capacitador}}</li>
+            <li class="list-group-item"><strong> Carga horaria: (h:m:s) </strong> {{training?.carga_horaria}}</li>
+            <li class="list-group-item"><strong> Contenido: </strong> {{training?.capacitacion_curso.contenido}}</li>
+          </ul>
+
+          <div class="ui-message ui-messages-warn">
+            <i class="pi pi-exclamation-triangle"></i>
+            <span class="texto-rojo" >EN CASO DE NO PODER ASISTIR A LA CAPACITACION POR MOTIVOS DE FUERZA MAYOR. EL JUSTIFICATIVO DEBERA LLEGAR AL DEPTO. DE DESARROLLO DE PERSONAL Y SEGURIDAD INDUSTRIAL MAXIMO <strong> 2 DIAS  ANTES DEL EVENTO </strong>, SIENDO ESTO RESPONSABILIDAD DEL FUNCIONARIO</span>
+          </div>
+
+        </div>
+      </div>
+      <h6 class="card-subtitle mb-2 text-danger "> </h6>
+    

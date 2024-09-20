@@ -1,0 +1,119 @@
+<div class="card px-6 py-6">
+    <p-toolbar styleClass="mb-4" *ngIf="role ==='ADMINISTRADOR' ">
+        <ng-template pTemplate="left">
+            <div class="my-2" >
+                <button pButton pRipple label="Capacitación Externa" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNewCursoext('')"  ></button>
+            </div>
+        </ng-template>
+    </p-toolbar>
+    <h5>Lista Capacitaciones</h5>
+    <p-table #dt1 [value]="traingdata" dataKey="id" [rows]="10" [loading]="loading" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" [globalFilterFields]="['codigo','nombre' ]" responsiveLayout="scroll">
+        <ng-template pTemplate="caption">
+            <div class="flex justify-content-between flex-column sm:flex-row">
+                <button pButton label="Clear" class="p-button-outlined mb-2" icon="pi pi-filter-slash" (click)="clear(dt1)"></button>
+                <span class="p-input-icon-left mb-2">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" #filter (input)="onGlobalFilter(dt1, $event)" placeholder="Buscar" class="w-full"/>
+                </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="min-width: 12rem">
+                    <div class="flex justify-content-between align-items-center">
+                        Código
+                        <p-columnFilter type="text" field="codigo" display="menu" placeholder="Buscar código capacitación"></p-columnFilter>
+                    </div>
+                </th>
+                <th style="min-width: 12rem">
+                    <div class="flex justify-content-between align-items-center">
+                        Nombre
+                        <p-columnFilter type="text" field="nombre" display="menu" placeholder="Buscar nombre curso"></p-columnFilter>
+                    </div>
+                </th>
+                <th style="min-width: 14rem">
+                    <div class="flex justify-content-between align-items-center">
+                        Fecha
+                    </div>
+                </th>
+                <th style="min-width: 14rem">
+                    <div class="flex justify-content-between align-items-center">
+                        Dirección
+                    </div>
+                </th>
+                <th style="min-width: 14rem">
+                    <div class="flex justify-content-between align-items-center">
+                        Carga Horaria
+                    </div>
+                </th>
+                <th style="min-width: 14rem" >
+                    <div class="flex justify-content-between align-items-center">
+                        Tipo Capacitación
+                    </div>
+                </th>
+
+                <th style="min-width: 14rem" >
+                    <div class="flex justify-content-between align-items-center">
+                        Accion
+                    </div>
+                </th>
+
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-customers>
+            <tr>
+                <td>
+                    {{customers.capacitacion_curso.codigo}}
+                </td>
+                <td>
+                    {{customers.capacitacion_curso.nombre }}
+                </td>
+                <td>
+                    {{ customers.fecha_inicio | date:'dd/MM/yy' }} - {{ customers.fecha_fin | date:'dd/MM/yy'}}
+                </td>
+                <td>
+                    {{ customers.direccion }}
+                </td>
+                <td>{{ customers.carga_horaria }}</td>
+                <td >{{ customers.tipo }}</td>
+
+                <td class="text-center">
+
+                    <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-success mr-2" (click)="FunctionVerDetalles(customers)" title="Ver"  ></button>
+
+                    <button pButton pRipple icon="pi pi-verified" class="p-button-rounded p-button-info" (click)='generarResap(customers)' title="Generar Resap" *ngIf="role ==='USUARIO' && customers.capacitacion_inscripcion[0].inscripcion_resap.length === 0 && customers.tipo === 'INTERNO' && estado.includes( customers.capacitacion_inscripcion[0].asistencia)  " ></button>
+
+                    <button pButton pRipple icon="pi pi-file-pdf" class="p-button-rounded p-button-warning" (click)='imprimirResap(customers.capacitacion_inscripcion[0].uuid)' title="Imprimir Resap" *ngIf=" customers.capacitacion_inscripcion[0].inscripcion_resap.length > 0 " ></button>
+
+                    <button pButton pRipple icon="pi pi-file-pdf" class="p-button-rounded p-button-help" (click)='imprimirResap37(customers.capacitacion_inscripcion[0].uuid)' title="Imprimir Resap" *ngIf=" customers.capacitacion_inscripcion[0].inscripcion_resap.length > 0 " ></button>
+
+                    <button pButton pRipple icon="pi pi-print" class="p-button-rounded p-button-outlined" (click)='imprimirCertificado(customers.capacitacion_inscripcion[0].uuid)' title="Certificado Interno" *ngIf=" customers.tipo === 'INTERNO' && customers.capacitacion_inscripcion[0].inscripcion_resap.length > 0" ></button>
+
+                    <a href="{{apiUrlImage}}{{customers.nombre_archivo}}" pButton pRipple icon="pi pi-print" class="p-button-rounded p-button-help" target="_blank" title="Certificado Externo" *ngIf=" customers.tipo === 'EXTERNO' " ></a>
+
+                    <!--<button pButton pRipple icon="pi pi-file" class="p-button-rounded p-button-help" (click)="FunctionCreateInscripcion(customers)" title="Incripción" *ngIf="customers.capacitacion_inscripcion.length === 0 && role ==='USUARIO' "> </button> -->
+
+
+
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+            <div class="flex align-items-center justify-content-between">
+                Total Carga Horaria Gestión: {{ calcularTotalCargaHorarioGestion() }} <br>
+                Total General Carga horaria: {{ calcularTotalCargaHorario() }}
+            </div>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="8">No customers found.</td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="loadingbody">
+            <tr>
+                <td colspan="8">Loading customers data. Please wait.</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>

@@ -1,0 +1,18 @@
+version: "3.8"
+services:
+  # APP WEB
+  app_web:
+    container_name: app_web
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 4008:80
+    networks:
+      - capacitacio-network
+volumes:
+  db_dev:
+    driver: local
+networks:
+  capacitacio-network:
+    driver: bridge

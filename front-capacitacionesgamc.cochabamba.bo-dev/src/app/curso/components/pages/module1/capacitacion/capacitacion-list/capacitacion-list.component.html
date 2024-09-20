@@ -1,0 +1,206 @@
+<!-- <div class="card px-6 py-6"> -->
+<div class="card">
+    <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+            <li class="flex align-items-center py-1 px-2  surface-border flex-wrap">
+                <div class="my-2" >
+                    <button pButton pRipple label="Nueva Capacitación" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew('')" *ngIf="role ==='ADMINISTRADOR' && codcurso && cursos?.activo === '1' "  ></button>
+                    <button *ngIf="cursos?.actives === 0"
+                    pButton 
+                    type="button" 
+                    [label]="cursos?.activo === '1' ? 'Inhabilitar curso' : 'Habilitar curso'" 
+                    class="p-button-warning"
+                    (click)="toggleActivoCurso()"
+                ></button><!-- <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedProducts()" [disabled]="!selectedProducts || !selectedProducts.length"></button> -->
+                </div>
+            </li>
+            
+            <li class="flex align-items-center py-1 px-2  surface-border flex-wrap" *ngIf="role ==='ADMINISTRADOR' && codcurso">
+                <div class="text-500 font-medium">Estado del curso:</div>
+                <div class="text-900 ">
+                    <ng-container *ngIf="cursos?.activo === '0'; else activo">
+                        Inactivo
+                        <p-chip label="" class="mr-2"></p-chip>
+                    </ng-container>
+                    <ng-template #activo>
+                        Activo
+                        <p-chip label="" class="mr-2"></p-chip>
+                    </ng-template>
+                </div> 
+            </li>
+            <ul class="list-group list-group-flush " *ngIf="role==='USUARIO'">
+                <li class="list-group-item ">TODOS LOS SERVIDORES PÚBLICOS <strong>PROFESIONALES Y/O QUE CUMPLAN FUNCIONES DE AUDITORES GUBERNAMENTALES (AUDITORES, INGENIEROS, ABOGADOS, Y OTROS), DEBERAN ACUMULAR 40 HORAS DE CAPACITACION COMO MÍNIMO </strong>, DANDO MAYOR IMPORTANCIA AL ÁREA EN LA QUE DESEMPEÑA SUS FUNCIONES.</li>
+                <li class="list-group-item">LOS SERVIDORES PÚBLICOS, EMPLEADOS O TRABAJADORES NO PROFESIONALES, QUE CUMPLEN FUNCIONES DE APOYO ADMINISTRATIVOS <strong>(SECRETARIAS, ADMINISTRADORES, Y OTROS) Y PERSONAL DE SERVICIO (MENSAJEROS, PORTEROS, Y OTROS AUXILIARES Y PERSONAL OPERATIVO EN GENERAL), TIENEN LA OBLIGACION DE ACUMULAR 20 HORAS DE CAPACITACION COMO MÍNIMO.</strong></li>
+                <li class="list-group-item">LA DIRECCIÓN DE RECURSOS HUMANOS <strong>RECOMIENDA</strong> A USTED ADOPTAR LOS RECAUDOS Y/O MEDIDAS QUE EL CASO ACONSEJE A OBJETO DE <strong>CUMPLIR LO ESTIPULADO, ASI MISMO ENVIAR AL DEPARTAMENTO DE DESARROLLO DE PERSONAL Y SEGURIDAD INDUSTRIAL UBICADO EN OBRAS PUBLICAS UNA COPIA DEL CERTIFICADO DE CADA CAPACITACIÓN.</strong></li>
+                <li class="list-group-item">El 50 %  DE LAS CAPACITACIONES DEBE SER EN SU ÁREA DE ESTUDIO</li>
+                <li class="list-group-item">EL FUNCIONARIO SOLO PUEDE SOLICITAR LA INSCRIPCION DE TRES CURSOS AL AÑO.</li>
+              </ul>
+        </ng-template>
+    </p-toolbar>
+    <h5>Lista Capacitaciones</h5>
+    <p-table #dt1 [value]="traingdata" dataKey="id" [rows]="10" [loading]="loading" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" [globalFilterFields]="['codigo','capacitacion_curso.nombre','capacitador' ]"  [scrollable]="true" scrollHeight="400px" >
+        <ng-template pTemplate="caption">
+            <div class="flex justify-content-between flex-column sm:flex-row">
+                <button pButton label="Clear" class="p-button-outlined mb-2" icon="pi pi-filter-slash" (click)="clear(dt1)"></button>
+                <span class="p-input-icon-left mb-2">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" #filter (input)="onGlobalFilter(dt1, $event)" placeholder="Buscar" class="w-full"/>
+                </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="min-width: 12rem">
+                    <div class="flex justify-content-between align-items-center">
+                        Código
+                        <p-columnFilter type="text" field="codigo" display="menu" placeholder="Buscar código capacitación"></p-columnFilter>
+                    </div>
+                </th>
+                <th style="min-width: 12rem">
+                    <div class="flex justify-content-between align-items-center">
+                        Nombre
+                        <p-columnFilter type="text" field="capacitacion_curso.nombre" display="menu" placeholder="Buscar nombre curso"></p-columnFilter>
+                    </div>
+                </th>
+                <th style="min-width: 12rem">
+                    <div class="flex justify-content-between align-items-center">
+                        Contenido
+                        <p-columnFilter type="text" field="capacitacion_curso.contenido" display="menu" placeholder="Buscar contenido curso"></p-columnFilter>
+                    </div>
+                </th>
+                <th style="min-width: 14rem">
+                    <div class="flex justify-content-between align-items-center">
+                        Fecha inicio
+                    </div>
+                </th>
+                <th style="min-width: 14rem">
+                    <div class="flex justify-content-between align-items-center">
+                        Fecha finalización
+                    </div>
+                </th>
+                <th style="min-width: 14rem" *ngIf="role ==='ADMINISTRADOR' ">
+                    <div class="flex justify-content-between align-items-center">
+                        Nombre Capacitador
+                        <p-columnFilter type="text" field="capacitador" display="menu" placeholder="Buscar Capacitador"></p-columnFilter>
+                    </div>
+                </th>
+                <th style="min-width: 14rem">
+                    <div class="flex justify-content-between align-items-center">
+                        Dirección
+                    </div>
+                </th>
+                <th style="min-width: 14rem" *ngIf="role ==='ADMINISTRADOR'">
+                    <div class="flex justify-content-between align-items-center">
+                        Horarios
+                    </div>
+                </th>
+                <th style="min-width: 14rem">
+                    <div class="flex justify-content-between align-items-center">
+                        Carga horaria
+                    </div>
+                </th>
+                <th style="min-width: 14rem" *ngIf="role ==='ADMINISTRADOR'">
+                    <div class="flex justify-content-between align-items-center">
+                        Tipo Capacitación
+                    </div>
+                </th>
+                <th style="min-width: 14rem" *ngIf="role ==='ADMINISTRADOR'">
+                    <div class="flex justify-content-between align-items-center">
+                        Cupo
+                    </div>
+                </th>
+                <th style="min-width: 14rem" *ngIf="role ==='ADMINISTRADOR'">
+                    <div class="flex justify-content-between align-items-center">
+                        Inscritos
+                    </div>
+                </th>
+                <th style="min-width: 14rem" *ngIf="role ==='USUARIO'">
+                    <div class="flex justify-content-between align-items-center">
+                        Estado inscripción
+                    </div>
+                </th>
+                <th style="min-width: 14rem" >
+                    <div class="flex justify-content-between align-items-center">
+                        Acción
+                    </div>
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-customers>
+            <tr *ngIf="role==='ADMINISTRADOR'||(role==='USUARIO' && !(customers.solicitudes>=customers.cupo && customers.capacitacion_inscripcion[0]?.estado === null))">
+                <td> {{customers.codigo}} </td>
+
+                <td> {{customers.capacitacion_curso.nombre}} </td>
+
+                <td> {{customers.capacitacion_curso.contenido}} </td>
+
+                <td> {{ customers.fecha_inicio | date:'dd/MM/yy' }} </td>
+
+                <td> {{ customers.fecha_fin | date:'dd/MM/yy'}} </td>
+
+                <td *ngIf="role ==='ADMINISTRADOR' "> {{ customers.capacitador }} </td>
+
+                <td> {{ customers.direccion }} </td>
+                
+                <td *ngIf="role ==='ADMINISTRADOR'"> {{ customers.horario_inicio }} - {{ customers.horario_fin }} </td>
+                
+                <td> {{ customers.carga_horaria }} </td>
+                
+                <td *ngIf="role ==='ADMINISTRADOR'" > {{ customers.tipo }} </td>
+
+                <td *ngIf="role ==='ADMINISTRADOR'" > {{ customers.cupo }} </td>
+
+                <td *ngIf="role ==='ADMINISTRADOR'" >
+                    Aprobados: {{getCantidadInscritosArray(customers.capacitacion_inscripcion,'APROBADO')}}<br>
+                    Pendientes: {{getCantidadInscritosArray(customers.capacitacion_inscripcion,'PENDIENTE')}}
+                </td>
+                <td *ngIf="role === 'USUARIO'" >{{customers.capacitacion_inscripcion[0]?.estado }}</td>
+
+                <td class="text-center">
+                    <button 
+                        pButton pRipple icon="pi pi-pencil" 
+                        class="p-button-rounded p-button-success mr-2" 
+                        (click)="FunctionEdit(customers.uuid)" 
+                        title="Editar"  
+                        *ngIf="role==='ADMINISTRADOR' && cursos ">
+                    </button>
+
+                    <button 
+                        pButton pRipple icon="pi pi-eject" 
+                        class="p-button-rounded p-button-info" 
+                        (click)='inscripcionCapacit(customers.uuid)' 
+                        title="Lista Inscritos" 
+                        *ngIf="role ==='ADMINISTRADOR' && codcurso === '' && customers.visible === 'SI' ">
+                    </button>
+
+                    <button 
+                        pButton pRipple icon="pi pi-eject" 
+                        class="p-button-rounded p-button-warning" 
+                        (click)='inscripcionCapacit(customers.uuid)' 
+                        title="Inscripcion Manual" 
+                        *ngIf="role ==='ADMINISTRADOR' && codcurso === '' && customers.visible === 'NO' ">
+                    </button>
+
+                    <!-- solo mostrar usuario -->
+                    <button pButton pRipple icon="pi pi-file" 
+                        class="p-button-rounded p-button-help" 
+                        (click)="FunctionCreateInscripcion(customers)" 
+                        title="Inscripción" 
+                        *ngIf="role ==='USUARIO' && customers.visible === 'SI'"> 
+                       <!-- *ngIf="role ==='USUARIO' && customers.visible === 'SI' && customers.solicitudes<customers.cupo && customers.capacitacion_inscripcion[0]?.estado===null"> -->
+                    </button>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="8">No elements found.</td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="loadingbody">
+            <tr>
+                <td colspan="8">Loading elements data. Please wait.</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>

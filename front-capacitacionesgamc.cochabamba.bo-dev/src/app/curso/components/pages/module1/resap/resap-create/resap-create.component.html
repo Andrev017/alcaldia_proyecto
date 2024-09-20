@@ -1,0 +1,83 @@
+<form [formGroup]="reactiveform" (ngSubmit)="SaveResap()">
+    <!-- <div >
+        <h5 *ngIf="!isAddMode">Registro Curso</h5>
+        <h5 *ngIf="isAddMode">Editar Curso</h5>
+
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+    </div> -->
+    <div class="grid">
+
+        <div class="col-12">
+            <p-fieldset [toggleable]="true">
+                <ng-template pTemplate="header">
+                    <div class="flex align-items-center text-primary">
+                        <span class="pi pi-book mr-2"></span>
+                        <span class="font-bold text-lg">Datos del evento</span>
+                    </div>
+                </ng-template>
+
+                <li class="flex align-items-center py-0 px-2 surface-border flex-wrap">
+                    <div class="text-500 w-10 md:w-4 font-bold">Fecha de Realización </div>
+                    <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">Desde: {{ traing.fecha_inicio |
+                        date:'dd/MM/yy' }} Hasta: {{ traing.fecha_fin | date:'dd/MM/yy'}}</div>
+                </li>
+                <li class="flex align-items-center py-1 px-2 surface-border flex-wrap">
+                    <div class="text-500 w-6 md:w-4 font-bold">Horarios de Realización </div>
+                    <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">de horas: {{ traing.horario_inicio
+                        }} a horas: {{ traing.horario_fin }}</div>
+                </li>
+
+                <li class="flex align-items-center py-1 px-2 surface-border flex-wrap">
+                    <div class="text-500 w-6 md:w-4 font-bold">Nombre del evento </div>
+                    <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1"> 
+                        {{traing.capacitacion_curso.nombre }}</div>
+                </li>
+                <li class="flex align-items-center py-1 px-2 surface-border flex-wrap">
+                    <div class="text-500 w-6 md:w-4 font-bold">Institución Organizadora </div>
+                    <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">{{ traing.inst_organizadora }}
+                    </div>
+
+                </li>
+
+            </p-fieldset>
+
+            <p-fieldset legend="Evaluación del instructor" [toggleable]="true" *ngFor="let tipo of tipoCriterio">
+                <div *ngFor="let criterio of tipo.tipo_criterio">
+
+                    <!-- <app-criterioeva-form  [criterio]="criterio" [calificacion]="calific" ></app-criterioeva-form>                         -->
+                    <div class="surface-section">
+                        <ul class="list-none p-0 m-0">
+                            <li class="flex align-items-center py-1 px-2 border-top-1 surface-border flex-wrap">
+                                <div class="text-500 w-6 md:w-5 font-medium">{{criterio.nombre}} </div>
+                                <div class="text-900 w-full md:w-7 md:flex-order-0 flex-order-1">
+                                    <div class="flex flex-wrap gap-3">
+
+                                        <div class="flex align-items-center" *ngFor="let cali of calific">
+                                            <p-radioButton formControlName="criterio{{criterio.id}}" value="{{cali}}"
+                                                inputId="criterio{{criterio.id}}"></p-radioButton>
+                                            <label for="ingredient1" class="ml-2">{{cali}}</label>
+                                        </div>
+
+
+                                    </div>
+
+                                </div>
+                            </li>
+
+                        </ul>
+
+                    </div>
+
+
+                </div>
+            </p-fieldset>
+        </div>
+
+        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text"
+            (click)="closeDialog()"></button>
+        <button type="submit" pButton pRipple label="Guardar" icon="pi pi-check" class="p-button-text"></button>
+    </div>
+
+</form>

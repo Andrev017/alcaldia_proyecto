@@ -1,0 +1,45 @@
+<form [formGroup]="reactiveform" (ngSubmit)="SaveTraing()">
+    <!-- <div >
+        <h5 *ngIf="!isAddMode">Registro Curso</h5>
+        <h5 *ngIf="isAddMode">Editar Curso</h5>
+
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+    </div> -->
+    <div class="grid">
+        <div class="col-12">
+            <div class="card">
+                <div class="p-fluid p-formgrid grid">
+                    <div class="field col-12 md:col-4">
+                        <label for="codigo">Nombre Tipo Evaluación</label>
+
+                        <p-autoComplete [(ngModel)]="selectedTipoEveAdvanced" [suggestions]="filteredTipoeve" (completeMethod)="filterTipoEva($event)"
+                        formControlName="nombre_tipo" [minLength]="1" (onSelect)="seleccionarItem($event) " [dropdown]="true" field="nombre" (onKeyUp)="clearItem()" ></p-autoComplete>  
+                        
+                        <input type="hidden" [(ngModel)]="selectedTipoEveId" name="id_tipo_evaluacion"  formControlName="id_tipo_evaluacion"/>
+
+                        <small class="p-error" *ngIf="shouldShowError('nombre_tipo')"  >{{ getErrorMessage('nombre_tipo') }}</small>
+                    </div>
+
+                    <div class="field col-12 md:col-5">
+                        <label for="text">Nombre Criterio Evaluación</label>
+                        <input type="text" pInputText formControlName="nombre_criterio"/>
+                        <small class="p-error" *ngIf="shouldShowError('nombre_criterio')"  >{{ getErrorMessage('nombre_criterio') }}</small>
+                    </div>
+                    <div class="field col-12 md:col-3">
+                        <label >Activo</label>
+                        <p-dropdown [options]='[{label: "ACTIVO", value: "1"}, {label: "CERRADO", value: "0"}]'   placeholder="Select a Language"    [showClear]="true" formControlName="activo" ></p-dropdown>
+                        <small class="p-error" *ngIf="shouldShowError('activo')"  >{{ getErrorMessage('activo') }}</small>
+                    </div>                    
+       
+                </div>
+            </div>
+       </div>
+       
+            <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="closeDialog()" ></button>
+            <button type="submit" pButton pRipple label="Guardar" icon="pi pi-check" class="p-button-text"></button>
+    </div>
+
+</form>
+

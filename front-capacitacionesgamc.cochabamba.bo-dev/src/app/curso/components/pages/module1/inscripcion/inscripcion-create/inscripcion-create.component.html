@@ -1,0 +1,24 @@
+<form [formGroup]="reactiveform" (ngSubmit)="SaveInscription()">
+            <app-info-traing [training] ="traing" ></app-info-traing>   
+            
+    
+    <div class="field col-12 md:col-12" *ngIf="isManual == 'true'">
+        <label for="codigo">Nombre empleado</label>
+        
+        <p-autoComplete [(ngModel)]="selectedEmpAdvanced" [suggestions]="filteredEmp" (completeMethod)="filterEmp($event)"
+        formControlName="nombre_completo" [minLength]="1" (onSelect)="seleccionarItem($event) " [dropdown]="true" field="nombre_completo" (onKeyUp)="clearItem()" [style]="{'width':'100%'}"  [forceSelection]="true" ></p-autoComplete>  
+        <small class="p-error" *ngIf="shouldShowError('nombre_completo')"  >{{ getErrorMessage('nombre_completo') }}</small>
+        
+        
+    </div>
+    <input type="hidden" [(ngModel)]="selectedEmpId" name="id_empleado"  formControlName="id_empleado" *ngIf="this.isManual" />
+    <br>
+    <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="closeDialog()" ></button>
+    <button 
+        type="submit" 
+        pButton pRipple label="Solicitar inscripción" 
+        icon="pi pi-check" 
+        class="p-button-text"
+        *ngIf="(traing.solicitudes<traing.cupo && traing.capacitacion_inscripcion[0]?.estado===null)||isManual=='true'">
+    </button>
+</form>  

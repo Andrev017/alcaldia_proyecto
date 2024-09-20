@@ -1,0 +1,172 @@
+<form [formGroup]="reactiveform" (ngSubmit)="createTraing()">
+    <!-- <div >
+        <h5 *ngIf="!isAddMode">Registro Curso</h5>
+        <h5 *ngIf="isAddMode">Editar Curso</h5>
+
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+    </div> -->
+    <div class="grid">
+        <div class="col-12">
+            <div class="card">
+                <div class="p-fluid p-formgrid grid">
+                    <div class="field col-12 md:col-6">
+                        <label for="codigo">Nombre Curso</label>
+                        
+                        <!-- <input [(ngModel)]="inputValue" (input)="realizarBusqueda()" placeholder="Buscar..." type="text"  class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" required autofocus formControlName="nombre" />
+                        <ul>
+                            <li *ngFor="let result of searchResults" (click)="seleccionarItem(result)"> {{ result.nombre }} </li>
+                        </ul>
+                        <input type="hidden" [(ngModel)]="selectedItemId" name="id_curso"  formControlName="id_curso"/> -->
+
+                        <p-autoComplete [(ngModel)]="selectedCursosAdvanced" [suggestions]="filteredCursos" (completeMethod)="filterCursos($event)"
+                        formControlName="nombre" [minLength]="1" (onSelect)="seleccionarItem($event) " [dropdown]="true" field="nombre" (onKeyUp)="clearItem()" ></p-autoComplete>  
+                        
+                        <input type="hidden" [(ngModel)]="selectedCursoId" name="id_curso"  formControlName="id_curso"/>
+
+                        <!-- <small class="p-error" *ngIf="shouldShowError('nombre')"  >{{ getErrorMessage('nombre') }}</small> -->
+                        
+                    </div>
+                    <!-- <div class="field col-12 md:col-3">
+                        <input type="hidden"  formControlName="codigo" [(ngModel)]="selectedCursosCodigo"  [readonly]="isReadonly"/>
+                        <small class="p-error" *ngIf="shouldShowError('codigo')"  >{{ getErrorMessage('codigo') }}</small>
+                    </div> -->
+
+                    <div class="field col-12 md:col-3">
+                        <label for="">Gestión</label>
+                        <p-calendar view="year" dateFormat="yy" inputId="yearpicker"  formControlName="gestion" [(ngModel)]="selectedDate"  [defaultDate]="selectedDate" [minDate]="selectedDate" [maxDate]="selectedDate" ></p-calendar>
+<!-- 
+                        <small *ngIf="shouldShowError('gestion')" class="text-danger" >{{ getErrorMessage('gestion') }}</small> -->
+                    </div>
+                    <div class="field col-12 md:col-3">
+                        <label >Carga Horaria</label>
+                        <input type="text" pInputText formControlName="carga_horaria" />
+                        <small class="p-error" *ngIf="shouldShowError('carga_horaria')"  >{{ getErrorMessage('carga_horaria') }}</small>
+                    </div>
+                    
+                    <div class="field col-12 md:col-6">
+                        <label for="dob">Fecha</label>
+                        <p-calendar [showIcon]="true" inputId="icon" dateFormat="dd/mm/yy"  formControlName="fecha" selectionMode="range" placeholder="01/01/2023 - 30/03/2023" [minDate]="selectedDate" ></p-calendar>
+                        <small class="p-error" *ngIf="shouldShowError('fecha')" >{{ getErrorMessage('fecha_inicio') }}</small>
+                    </div>
+                    <!-- <div class="field col-12 md:col-3">
+                        <label >Fecha Fin:</label>
+                        <p-calendar [showIcon]="true" inputId="icon" dateFormat="dd/mm/yy"  formControlName="fecha_fin"></p-calendar>
+                        <small class="p-error" *ngIf="shouldShowError('fecha_fin')"  >{{ getErrorMessage('fecha_fin') }}</small>
+                    </div> -->
+                    <!--<div class="field col-12 md:col-3">
+                            <label >Horario Inicio</label>
+                            <p-calendar [showIcon]="true" [timeOnly]="true" [showTime]="true" [showSeconds]="true"  formControlName="horario_inicio" placeholder="20:30:00">         
+                            </p-calendar>
+                            <small class="p-error" *ngIf="shouldShowError('horario_inicio')"  >{{ getErrorMessage('horario_inicio') }}</small>
+                    </div>
+                    <div class="field col-12 md:col-3">
+                            <label >Horario Fin</label>
+                            <p-calendar [showIcon]="true" [timeOnly]="true" [showTime]="true" [showSeconds]="true" formControlName="horario_fin" placeholder="22:30:00">
+                            </p-calendar>
+                            <small class="p-error" *ngIf="shouldShowError('horario_fin')"  >{{ getErrorMessage('horario_fin') }}</small>
+                    </div>-->
+
+                    
+                    <div class="field col-12 md:col-6">
+                        <label >Institución Organizadora</label>
+                        <input type="text"  pInputText formControlName="inst_organizadora">
+                        <small class="p-error" *ngIf="shouldShowError('inst_organizadora')"  >{{ getErrorMessage('inst_organizadora') }}</small>
+                    </div>
+                    <!--<div class="field col-12 md:col-6">
+                        <label >Dirección</label>
+                        <input type="text" pInputText formControlName="direccion">
+                        <small class="p-error" *ngIf="shouldShowError('direccion')"  >{{ getErrorMessage('direccion') }}</small>
+                    </div>
+
+                    <div class="field col-12 md:col-6">
+                        <label >Capacitador</label>
+                        <input type="text" pInputText formControlName="capacitador">
+                        <small class="p-error" *ngIf="shouldShowError('capacitador')"  >{{ getErrorMessage('capacitador') }}</small>
+                    </div>-->
+                    <div class="field col-12 md:col-6">
+                        <label >Certificado</label>
+                        <p-fileUpload
+                        id="fileInput"
+                        name="file"
+                        (onSelect)="onFileSelect($event)"
+                        [customUpload]="true"
+                        [multiple]="false" 
+                        [showUploadButton]="false"
+                        [showCancelButton]="true"
+                        
+                        >
+                        
+                    </p-fileUpload>            
+                    </div>
+                    <!-- <div class="field col-12 md:col-2">
+                        <label >activo</label>
+                        <p-dropdown  [options]='[{name: "ACTIVO"}, {name: "CERRADO"}]'   placeholder="Select a Language"  optionLabel="name"  [showClear]="true" formControlName="visible"></p-dropdown>
+                        <input type="text" pInputText formControlName="activo">
+                        <small class="p-error" *ngIf="shouldShowError('activo')"  >{{ getErrorMessage('activo') }}</small>
+                    </div> -->
+
+                </div>
+            </div>
+       </div>
+       <!-- <div class="grid formgrid" >
+        <div class="field col-12 md:col-3">
+            <label >Carga Horaria</label>
+            <input type="text" pInputText formControlName="carga_horaria" />
+            <small class="p-error" *ngIf="shouldShowError('carga_horaria')"  >{{ getErrorMessage('carga_horaria') }}</small>
+        </div>
+        <div class="field col-12 md:col-3">
+            <label >Cupo</label>
+            <input type="text" pInputText formControlName="cupo" />
+        </div>
+        <div class="field col-12 md:col-3">
+            <label >Cupo</label>
+            <input type="text" pInputText formControlName="cupo" />
+        </div>
+        <div class="field col-12 md:col-3">
+                <label >Horario Inicio</label>
+                <input type="text"  pInputText formControlName="horario_inicio">
+        </div>
+        <div class="field col-12 md:col-3">
+                <label >Horario Fin</label>
+                <input type="text" pInputText formControlName="horario_fin">
+
+        </div>
+       </div>
+       <div class="grid formgrid" >
+        <div class="field col-12 md:col-3">
+            <label >Institución Organizadora</label>
+            <input type="text"  pInputText formControlName="inst_organizadora">
+        </div>
+        <div class="field col-12 md:col-3">
+            <label >Dirección</label>
+            <input type="text" pInputText formControlName="direccion">
+        </div>
+       </div>
+       <div class="grid formgrid" >
+        <div class="field col-12 md:col-3">
+            <label >Capacitador</label>
+            <input type="text" pInputText formControlName="capacitador">
+        </div>
+        <div class="field col-12 md:col-3">
+            <label >Tipo</label>
+            <input  type="text" pInputText formControlName="tipo">
+        </div>
+        <div class="field col-12 md:col-3">
+            <label >visible</label>
+            <input type="text" pInputText  formControlName="visible">
+
+        </div>
+        <div class="field col-12 md:col-3">
+            <label >activo</label>
+            <input type="text" pInputText formControlName="activo">
+        </div>
+    </div> -->
+
+            <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="closeDialog()" ></button>
+            <button type="submit" pButton pRipple label="Guardar" icon="pi pi-check" class="p-button-text"></button>
+    </div>
+
+</form>
+
