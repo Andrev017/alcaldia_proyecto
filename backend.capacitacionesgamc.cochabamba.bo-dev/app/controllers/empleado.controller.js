@@ -53,10 +53,10 @@ const infoEmpledo = async (ciemp) => {
     const params = {
         ci: ciemp,
     };
-  
-  const resultado = axios.get('http://localhost:8000/index.php?r=webservices/v1/info-empleado', { params });
-  
-  console.log(resultado);
+
+    const resultado = axios.get('http://localhost:8000/index.php?r=webservices/v1/info-empleado', { params });
+
+    console.log(resultado);
     return resultado;
 }
 */
