@@ -205,11 +205,14 @@
             </p-fieldset>
         </div>
 
-        <div style="display: flex; align-items: center;">
+        <div class="flex justify-content-between flex-column sm:flex-row">
+
             <button (click)="closeModal()" pButton pRipple label="Cancelar" icon="pi pi-times"
                 class="p-button-text"></button>
 
-            <button type="submit" pButton pRipple label="Guardar" icon="pi pi-check" class="p-button-text m-4"></button>
+            <button type="submit" pButton pRipple label="Guardar" icon="pi pi-check" 
+                class="p-button-text m-4"></button>
+
 
             <button (click)="generatePDF()" pButton pRipple icon="pi pi-print"
                 class="p-button-rounded p-button-success"></button>

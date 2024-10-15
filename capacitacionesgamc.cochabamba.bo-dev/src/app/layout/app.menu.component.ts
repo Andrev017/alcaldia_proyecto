@@ -1,10 +1,9 @@
-import { OnInit } from '@angular/core';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { LayoutService } from './service/app.layout.service';
 import { JwtHelperService } from '@auth0/angular-jwt';
-
 import { Subscription } from 'rxjs';
 import { AuthService } from '../curso/service/auth/auth.service';
+
 
 @Component({
     selector: 'app-menu',
@@ -27,15 +26,16 @@ export class AppMenuComponent implements OnInit {
                 console.log(auths);
             });
     }
-
+        
     ngOnInit() {
         //const userRole = localStorage.getItem('role');
         //if(this.auth.menu){
         this.model = this.auth.menu; //ROUTES.filter(menuItem => menuItem.roles.includes(userRole));
-        
+
+
         this.model.push({
-          label: 'Solicitud Capacitaciones',
-      });
+            label: 'Solicitud Capacitaciones',
+        });
         //}else{
         //const toke = this.jwtHelper.decodeToken( localStorage.getItem("profanis_auth") );
 

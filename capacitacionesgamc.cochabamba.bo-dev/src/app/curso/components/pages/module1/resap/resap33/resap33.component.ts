@@ -24,7 +24,6 @@ export class Resap33Component implements OnInit {
 
     abrirModalOp() {
         if (this.isToggleEnabled) {
-            // Solo abrir si está habilitado
             console.log('Modal abierto');
             this.modal_resap33.show();
         }
@@ -36,6 +35,4 @@ export class Resap33Component implements OnInit {
             'contains'
         );
     }
-
-
 }

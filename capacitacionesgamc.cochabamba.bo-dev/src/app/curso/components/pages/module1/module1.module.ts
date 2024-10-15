@@ -69,6 +69,7 @@ import { Resap37Component } from './resap/resap37/resap37.component';
 import { Resap33Component } from './resap/resap33/resap33.component';
 import { ModalResap33Component } from './resap/modal-resap33/modal-resap33.component';
 import { SolicitudesLlenadasComponent } from './solicitudes-llenadas/solicitudes-llenadas.component';
+import { GeneracionGraficoComponent } from './resap/generacion-grafico/generacion-grafico.component';
 
 
 @NgModule({
@@ -106,6 +107,7 @@ import { SolicitudesLlenadasComponent } from './solicitudes-llenadas/solicitudes
     Resap33Component,
     ModalResap33Component,
     SolicitudesLlenadasComponent,
+    GeneracionGraficoComponent,
   ],
   imports: [
     CommonModule,

@@ -1,0 +1,55 @@
+<p-dialog header="Generar Grafico" [(visible)]="isVisible" [modal]="true" [closable]="true" [style]="{width: '75vw'}"
+    (onHide)="closeModal()">
+
+
+    <p-toolbar styleClass="mb-4">
+        <h5>COMO ORGANIZAR LAS LISTAS</h5>
+
+    </p-toolbar>
+
+
+    <p-toolbar styleClass="mb-4">
+        <div class="grid">
+            <div class="col-12" id="htmlData">
+                <canvas id="barChart" style="width: 100%; height: 530px;"></canvas>
+            </div>
+        </div>
+    </p-toolbar><br><br>
+
+
+
+    <p-table #dt [value]="products" (sortFunction)="customSort($event)" [customSort]="true">
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="code">
+                    Code <p-sortIcon field="code" />
+                </th>
+                <th pSortableColumn="name" style="text-align: center;">
+                    Conocimiento Demandados <p-sortIcon field="name" />
+                </th>
+                <th pSortableColumn="category">
+                    Category <p-sortIcon field="category" />
+                </th>
+                <th pSortableColumn="quantity" style="text-align: center;">
+                    Numero del Conocimiento Requerido <p-sortIcon field="quantity" />
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-product>
+            <tr>
+                <td>{{ product.code }}</td>
+                <td>{{ product.name }}</td>
+                <td>{{ product.category }}</td>
+                <td>{{ product.quantity }}</td>
+            </tr>
+        </ng-template>
+    </p-table><br><br>
+
+
+    <div class="flex justify-content-between flex-column sm:flex-row">
+
+        <button (click)="closeModal()" pButton pRipple label="Cancelar" icon="pi pi-times"
+            class="p-button-text"></button>
+    </div>
+
+</p-dialog>

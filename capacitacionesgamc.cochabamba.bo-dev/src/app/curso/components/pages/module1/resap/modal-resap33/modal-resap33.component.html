@@ -1,4 +1,4 @@
-<!-- ---------------------------MODAL PARTE DE LOS OPERATIVOS---------------------------- -->
+<!-- ---------------------------MODAL ---------------------------- -->
 <p-dialog header="RESAP 33" [(visible)]="displayModal" [modal]="true" [closable]="true" [resizable]="false"
     [style]="{width: '75vw'}" [draggable]="false">
 
@@ -13,6 +13,7 @@
             <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
                     <div class="my-2 d-flex align-items-center" style="display: flex; flex-wrap: nowrap;">
+
                         <p-dropdown [options]="sector" [(ngModel)]="listSector" optionLabel="name"
                             placeholder="A qué sector pertenece" style="margin-right: 500px;">
                         </p-dropdown>
@@ -43,48 +44,109 @@
                     </div>
 
                     <div class="flex align-items-center mb-2">
-                        <div class="text-500 font-bold w-4">Item:</div>
-                        <p class="ml-2">{{auth?.emp.item}}</p>
-                    </div>
-
-                    <div class="flex align-items-center mb-2">
                         <div class="text-500 font-bold w-4">Puesto que Ocupa:</div>
                         <p class="ml-1">{{auth?.emp.cargo}}</p>
                     </div>
 
                     <div class="flex align-items-center mb-2">
+                        <div class="text-500 font-bold w-4">Item:</div>
+                        <p class="ml-2">{{auth?.emp.item}}</p>
+                    </div>
+
+                    <div class="flex align-items-center mb-2">
+                        <div class="text-500 font-bold w-4">Secretraria: </div>
+                        <input type="text" pInputText required required="Llenar campo" style="width: 400px;" />
+                    </div>
+
+                    <div class="flex align-items-center mb-2">
+                        <div class="text-500 font-bold w-4">Dirreción: </div>
+                        <input type="text" pInputText required required="Llenar campo" style="width: 400px;" />
+                    </div>
+
+                    <div class="flex align-items-center mb-2">
                         <div class="text-500 font-bold w-4">Departamento/Division:</div>
                         <p class="ml-1">{{auth?.emp.unidad}}</p>
-                    </div><br>
-
-                    <p-dropdown [options]="secretaria" [(ngModel)]="listSecretaria" optionLabel="name"
-                        placeholder="Secretaria:">
-                    </p-dropdown><br>
-
-                    <div class="flex">
-                        <p-dropdown [options]="direccion" [(ngModel)]="listDireccion" optionLabel="name"
-                            placeholder="Direccion / Comuna:">
-                        </p-dropdown>
                     </div>
+
                 </li>
             </p-fieldset><br>
-            <!-- ----------------------------- PREGUNTA 1 --------------------------- -->
+
+            <!-- ----------------------------- PREGUNTA 1 -------------------------------------------------------------------- -->
+
             <p-fieldset legend="1. Conocimientos que exige el cargo, de acuerdo al manual de funciones"
                 [toggleable]="true">
                 <div class="surface-section">
                     <div class="flex align-items-center justify-content-center surface-border flex-wrap">
-                        <textarea rows="5" cols="70" placeholder="Ingrese su Recomendación" pInputTextarea
-                            formControlName="text" style="text-align: left; padding: 10px;"></textarea>
+
+                        <textarea rows="5" cols="70" placeholder="Ingrese su Recomendación" pInputTextarea required
+                            formControlName="text" style="text-align: left; padding: 10px;"
+                            (keydown)="onKeydown($event)">1. </textarea>
+
                     </div>
                 </div>
             </p-fieldset><br>
 
-            <!-- --------------------------------- PREGUNTA 2 ------------------------------- -->
+
+            <!-- --------------------------------- PREGUNTA 2 ----------------------------------------------------------- -->
+
             <p-fieldset
                 legend="2.   Que conocimientos se requiere ampliar o conocer el trabajador y/o servidor Público, para poder desempeñar óptimamente sus funciones "
                 [toggleable]="true">
 
                 <div class="flex flex-column py-0 px-2 surface-border">
+                    <label>Conocimiento:
+                        <p-dropdown [options]="conocimiento_data" [(ngModel)]="listConocim" optionLabel="name"
+                            placeholder="Listado Conocimiento pre Defenidos " style="margin-left: 10px; ">
+                        </p-dropdown>
+                    </label><br>
+
+                    <div class="flex justify-content-between flex-column sm:flex-row">
+                        <label>
+                            Otro:
+                            <input type="text" pInputText [(ngModel)]="nuevoConocimiento2"
+                                style="width: 550px; margin-left: 60px;" />
+                        </label>
+
+
+                        <button *ngIf="!editando" pButton type="button" label="Agregar" icon="pi pi-plus"
+                            class="p-button-success" (click)="agregarPregunta2()"></button>
+                        <button *ngIf="editando" pButton type="button" label="Guardar" icon="pi pi-save"
+                            class="p-button-warning" (click)="guardarEdicionPregunta2()"></button>
+                    </div><br>
+
+                    <p-table [value]="conocimientos_insert2" [rows]="3" [rowHover]="true"
+                        styleClass="p-datatable-gridlines" responsiveLayout="scroll">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th style="min-width: 20rem">
+                                    <div>Curso</div>
+                                </th>
+                                <th style="min-width: 6rem">
+                                    <div>Opciones</div>
+                                </th>
+                            </tr>
+                        </ng-template>
+
+                        <ng-template pTemplate="body" let-conocimiento let-rowIndex="rowIndex">
+                            <tr>
+                                <td>{{ conocimiento }}</td>
+                                <td style="display: flex; justify-content: center; margin: 0 auto;">
+                                    <button pButton pRipple icon="pi pi-pencil"
+                                        class="p-button-rounded p-button-info m-1" title="Editar"
+                                        (click)="editarPregunta2(conocimiento, rowIndex)"></button>
+
+                                    <!-- <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger m-1" title="Dar de Baja" (click)="eliminarConocimiento(rowIndex)"></button> -->
+                                    <button pButton pRipple icon="pi pi-trash"
+                                        class="p-button-rounded p-button-danger m-1" title="Dar de Baja"
+                                        (click)="eliminarPregunta3(conocimiento)"></button>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+
+                </div>
+            </p-fieldset>
+            <!-- <div-- class="flex flex-column py-0 px-2 surface-border"> 
                     <label>Conocimiento:
                         <p-dropdown [options]="conocimiento" [(ngModel)]="listConocim" optionLabel="name"
                             placeholder="Listado Conocimiento pre Defenidos " style="margin-left: 10px; ">
@@ -93,7 +155,7 @@
 
                     <div class="flex justify-content-between flex-column sm:flex-row">
                         <label>
-                            Otros: <input type="text" pInputText style="width: 300px; margin-left: 60px;" />
+                            Conocimiento: <input type="text" pInputText style="width: 500px; margin-left: 60px;" />
                         </label>
 
                         <button pButton type="button" label="Agregar" icon="pi pi-plus"
@@ -130,100 +192,101 @@
                             </tr>
                         </ng-template>
                     </p-table>
-                </div>
-            </p-fieldset><br>
+                </div-->
 
-            <!-- ----------------------------------PREGUNTA 3 -------------------------------- -->
+
+            <!-- ---------------------------------------PREGUNTA 3 --------------------------------------------------------------------------- -->
+
             <p-fieldset legend=" 3.  Las funciones realizadas, a su criterio, qué conocimientos demandan por el Trabajador y/o Servidor 
             Público Municipal. La prioridad podría ser alta, media o baja" [toggleable]="true">
 
-                <label>
-                    Función: <input type="text" pInputText style="width: 790px; margin-left: 50px;" />
-                </label><br><br>
+                <div class="flex flex-column py-0 px-2 surface-border">
+                    <div class="flex justify-content-between flex-column sm:flex-row">
+                        <label>
+                            Función:
+                            <input type="text" pInputText [(ngModel)]="nuevaFuncion"
+                                style="width: 780px; margin-left: 45px;" />
 
+                        </label>
+                    </div><br><br>
 
+                    <div class="flex justify-content-between flex-column sm:flex-row">
 
-                <div class="flex justify-content-between flex-column sm:flex-row">
-                    <label style="margin-right: 10px;">
-                        Conocimiento:
-                        <input type="text" pInputText style="width: 450px; margin-left: 10px;" />
-                    </label>
+                        <div style="display: flex; align-items: center;">
+                            <label style="margin-right: 10px;">
+                                Conocimiento:
+                            </label>
+                            <textarea rows="3" pInputText [(ngModel)]="nuevoConocimiento3"
+                                style="width: 600px;"></textarea>
+                        </div>
 
-                    <label style="margin-right: 10px;">
-                        Prioridad:
-                        <p-dropdown [options]="prioridad" [(ngModel)]="listPrioridad" optionLabel="name"
-                            placeholder="Nivel" style="margin-left: 10px;">
-                        </p-dropdown>
-                    </label>
+                        <label style="display: flex; align-items: center;">
+                            Prioridad:
+                            <p-dropdown [options]="prioridad" [(ngModel)]="nuevaPrioridad" optionLabel="name"
+                                placeholder="Nivel" style="margin-left: 10px;"></p-dropdown>
+                        </label>
+                    </div>
 
-                    <button pButton type="button" label="Agregar" icon="pi pi-plus" class="p-button-success"></button>
-                </div> <br>
+                    <div style="display: flex; justify-content: flex-end;">
 
-                <p-table [rows]="3" [rowHover]="true" styleClass="p-datatable-gridlines"
-                    [globalFilterFields]="['Curso','Opciones']" responsiveLayout="scroll">
-                    <ng-template pTemplate="header">
-                        <tr>
-                            <th style="min-width: 17rem">
-                                <div>
-                                    Función
-                                </div>
-                            </th>
-                            <th style="min-width: 9rem">
-                                <div>
-                                    Conocimiento Demandado
-                                </div>
-                            </th>
-                            <th style="min-width: 5rem">
-                                <div>
-                                    Prioridad
-                                </div>
-                            </th>
-                            <th style="min-width: 6rem">
-                                <div>
-                                    Opciones
-                                </div>
-                            </th>
-                        </tr>
-                        <tr>
-                            <th>
-                                <label class="text-700 w-10 md:w-4 font-bold">Cumplir y hacer cumpli</label>
-                            </th>
-                            <th>
-                                <label class="text-700 w-10 md:w-4 font-bold">Conocimientos</label>
-                            </th>
-                            <th>
-                                <label class="text-700 w-10 md:w-4 font-bold">Alta</label>
-                            </th>
-                            <th style="display: flex; justify-content: center; margin: 0 auto;">
+                        <button *ngIf="!editando" pButton type="button" label="Agregar" icon="pi pi-plus"
+                            class="p-button-success" (click)="agregarPregunta3()"></button>
 
-                                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-info m-1"
-                                    title="Editor"></button>
+                        <button *ngIf="editando" pButton type="button" label="Guardar" icon="pi pi-save"
+                            class="p-button-warning" (click)="agregarPregunta3()"></button>
+                    </div><br><br>
 
-                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger m-1"
-                                    title="Dar de Baja "></button>
-                            </th>
-                        </tr>
-                    </ng-template>
-                </p-table>
+                    <p-table [value]="conocimientos_insert3" [rows]="10" [rowHover]="true"
+                        styleClass="p-datatable-gridlines" responsiveLayout="scroll">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th style="min-width: 15rem">Función</th>
+                                <th style="min-width: 20rem">Conocimiento Demandado</th>
+                                <th style="min-width: 1rem">Prioridad Alta</th>
+                                <th style="min-width: 1rem">Prioridad Medio</th>
+                                <th style="min-width: 1rem">Prioridad Bajo</th>
+                                <th style="min-width: 3rem">Opciones</th>
+                            </tr>
+                        </ng-template>
 
+                        <ng-template pTemplate="body" let-conocimiento let-rowIndex="rowIndex">
+                            <tr>
+                                <td>{{ conocimiento.funcion }}</td>
+                                <td>{{ conocimiento.conocimiento }}</td>
+                                <td>{{ conocimiento.prioridad === 'Alta' ? 'X' : '' }}</td>
+                                <td>{{ conocimiento.prioridad === 'Medio' ? 'X' : '' }}</td>
+                                <td>{{ conocimiento.prioridad === 'Bajo' ? 'X' : '' }}</td>
+                                <td style="display: flex; justify-content: center; margin: 0 auto;">
 
+                                    <button pButton pRipple icon="pi pi-pencil"
+                                        class="p-button-rounded p-button-info m-1" title="Editar"></button>
+
+                                    <button pButton pRipple icon="pi pi-trash"
+                                        class="p-button-rounded p-button-danger m-1" title="Eliminar"
+                                        (click)="eliminarPregunta2(rowIndex)"></button>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
 
             </p-fieldset><br>
+
 
             <!-- ------------------------------ PREGUNTA 4 ---------------------------- -->
             <p-fieldset legend="4. Mencione las materias en las que el Trabajador y/o Servidor Público Municipal tiene conocimientos 
                 profundos y podría actuar como capacitador." [toggleable]="true">
 
                 <div class="flex flex-column py-0 px-2 surface-border">
-                    <label>Materias:
+                    <!-- <label>Materias:
                         <p-dropdown [options]="conocimiento" [(ngModel)]="listConocim" optionLabel="name"
                             placeholder="Listado Conocimiento pre Defenidos" style="margin-left: 20px; ">
                         </p-dropdown>
-                    </label><br>
+                    </label><br> -->
 
                     <div class="flex justify-content-between flex-column sm:flex-row">
                         <label>
-                            Otros: <input type="text" pInputText style="width: 292px; margin-left: 40px;" />
+                            Materias: <input type="text" pInputText style="width: 500px; margin-left: 30px;" />
                         </label>
 
                         <button pButton type="button" label="Agregar" icon="pi pi-plus"
@@ -245,19 +308,6 @@
                                     </div>
                                 </th>
                             </tr>
-                            <!-- <tr>
-                                <th>
-                                    <label class="text-700 w-10 md:w-4 font-bold">Gestion Tramites</label>
-                                </th>
-                                <th style="display: flex; justify-content: center; margin: 0 auto;">
-
-                                    <button pButton pRipple icon="pi pi-pencil"
-                                        class="p-button-rounded p-button-info m-1" title="Editar"></button>
-
-                                    <button pButton pRipple icon="pi pi-trash"
-                                        class="p-button-rounded p-button-danger m-1" title="Dar de Baja "></button>
-                                </th>
-                            </tr> -->
                         </ng-template>
                     </p-table>
                 </div>
@@ -269,12 +319,13 @@
 
 
     <div class="flex justify-content-between flex-column sm:flex-row">
-        <button pButton type="button" label="Guardar" icon="pi pi-check" class="p-button-success p-mr-4"
+
+        <button (click)="cerrarModal()" pButton pRipple label="Cancelar" icon="pi pi-times"
+            class="p-button-text"></button>
+
+        <button pButton type="button" label="Guardar" icon="pi pi-check" class="p-button-text m-4"
             (click)="guardar()"></button>
 
-            
-        <button pButton type="button" label="Cancelar" icon="pi pi-times" class="p-button-danger"
-            (click)="cerrarModal()"></button>
     </div>
 
 

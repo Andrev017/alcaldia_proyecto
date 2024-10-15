@@ -11,39 +11,43 @@ import { ModalResap33Service } from 'src/app/curso/service/resap/modal-resap33.s
 export class ModalResap33Component implements OnInit {
     fechaActual: Date;
     displayModal: boolean = false;
+    currentLineNumber = 1;
+
+    nuevaFuncion: string = '';
+    nuevoConocimiento2: string = '';
+    nuevaPrioridad: any = '';
+    nuevoConocimiento3: string = '';
+
+    conocimientos_insert2: any[] = [];
+    conocimientos_insert3: any[] = [];
+    prioridad_insert: any[] = [];
+    editando: boolean = false;
+    indexEdicion: number | null = null;
+
     public auth: any;
     private userSubscription: Subscription;
+
     listSector: any;
-    listSecretaria: any;
-    listDireccion: any;
-    listConocim: any;
     listPrioridad: any;
+    listConocim: any;
 
     sector = [
-        { name: 'Operativo', code: ''},
-        { name: 'Administrativo', code: ''},
+        { name: 'Operativo', code: '' },
+        { name: 'Administrativo', code: '' },
     ];
 
-    secretaria = [
-        { name: 'nombre', code: '' },
-        { name: 'nombre', code: '' },
-    ];
-
-    direccion = [
-        { name: 'nombre', code: '' },
-        { name: 'nombre', code: '' },
-    ];
-
-    conocimiento = [
-        { name: 'Ley 1178', code: 'ly' },
-        { name: 'Manejo de Archivo', code: 'RM' },
-    ];
     prioridad = [
         { name: 'Alta', code: 'al' },
         { name: 'Medio', code: 'me' },
         { name: 'Bajo', code: 'ba' },
     ];
 
+    conocimiento_data = [
+        { name: 'Curso 1', code: 'c1' },
+        { name: 'Curso 2', code: 'c2' },
+        { name: 'Curso 3', code: 'c3' },
+        { name: 'Curso 4', code: 'c4' },
+    ];
     constructor(
         private authService: AuthService,
         private modal_resap33: ModalResap33Service
@@ -71,12 +75,92 @@ export class ModalResap33Component implements OnInit {
     }
 
     guardar() {
-
         alert('Formulario guardado');
         this.cerrarModal();
     }
-    messages(){
-        
+
+    // ---------------------------------------Input Enumerado----------------------------------------------
+
+    onKeydown(event: KeyboardEvent) {
+        const textarea = event.target as HTMLTextAreaElement;
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            const value = textarea.value;
+            textarea.value = value + '\n' + `${++this.currentLineNumber}. `;
+        }
     }
 
+    // ------------------------------------------pregunta 2-------------------------------------------
+
+    agregarPregunta2() {
+        if (this.nuevoConocimiento2.trim()) {
+            this.conocimientos_insert2.push(this.nuevoConocimiento2);
+            this.nuevoConocimiento2 = '';
+        }
+    }
+
+    eliminarPregunta2(conocimiento: string) {
+        this.conocimientos_insert2 = this.conocimientos_insert2.filter(
+            (c) => c !== conocimiento
+        );
+    }
+
+    editarPregunta2(conocimiento: string, index: number) {
+        this.nuevoConocimiento2 = conocimiento;
+        this.editando = true; // Activa el modo de edición
+        this.indexEdicion = index; // Guarda el índice del conocimiento que se está editando
+    }
+
+    // Método para guardar los cambios de edición
+    guardarEdicionPregunta2() {
+        if (this.indexEdicion !== null) {
+            this.conocimientos_insert2[this.indexEdicion] =
+                this.nuevoConocimiento2; // Actualiza el conocimiento editado
+            this.cancelarEdicionPregunta2(); // Restablece el formulario
+        }
+    }
+
+    cancelarEdicionPregunta2() {
+        this.nuevoConocimiento2 = '';
+        this.editando = false;
+        this.indexEdicion = null;
+    }
+
+    // -------------------------------------Pregunta 3------------------------------------------------
+    agregarPregunta3() {
+        if (this.nuevaFuncion.trim()) {
+            this.prioridad_insert.push(this.nuevaFuncion);
+            this.nuevaFuncion = '';
+        }
+        if (this.nuevoConocimiento3.trim()) {
+            this.conocimientos_insert3.push(this.nuevoConocimiento3);
+            this.nuevoConocimiento3 = '';
+        }
+    }
+    eliminarPregunta3(pregunta3: string) {
+        this.prioridad_insert = this.prioridad_insert.filter(
+            (c) => c !== pregunta3
+        );
+        this.conocimientos_insert3 = this.conocimientos_insert3.filter(
+            (a) => a !== pregunta3
+        );
+    }
+    
+    editarPregunta3(){
+        if (this.indexEdicion !== null) {
+            this.conocimientos_insert2[this.indexEdicion] =
+                this.nuevoConocimiento2; // Actualiza el conocimiento editado
+            this.cancelarEdicionPregunta2(); // Restablece el formulario
+        }
+    }
+    agregarEdicionPregunta3(){
+        if(this.indexEdicion !== null){
+            this.cancelarEdicionPregunta3();
+        }
+    }
+    cancelarEdicionPregunta3(){
+
+    }
+
+    // ----------------------------------- Pregunta 4 --------------------------------------------------
 }

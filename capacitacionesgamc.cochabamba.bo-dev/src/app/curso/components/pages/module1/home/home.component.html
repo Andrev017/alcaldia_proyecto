@@ -3,9 +3,10 @@
         <div class="card">
             <h4>Funcionario</h4>
             <div class="border-round border-1 surface-border p-4">
-                <strong>Carnet de Identidad:</strong> {{ auth?.emp.ci }} 
+                <strong>Carnet de Identidad:</strong> {{ auth?.emp.ci }}
                 <br>
-                <strong>Nombre Completo:</strong> {{ auth?.emp.nombre  +' '+ auth?.emp.otro_nombre +' '+ auth?.emp.paterno + ' ' +auth?.emp.materno }}
+                <strong>Nombre Completo:</strong> {{ auth?.emp.nombre +' '+ auth?.emp.otro_nombre +' '+
+                auth?.emp.paterno + ' ' +auth?.emp.materno }}
                 <br>
                 <strong>Cargo:</strong> {{auth?.emp.cargo}}
                 <br>
@@ -14,7 +15,7 @@
             </div>
 
             <!-- <h5>Fieldset</h5>
-             <p-fieldset legend="Legend" [toggleable]="true" class="line-height-3 m-0">
+            <p-fieldset legend="Legend" [toggleable]="true" class="line-height-3 m-0">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
                 dolore magna aliqua.
                 Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo

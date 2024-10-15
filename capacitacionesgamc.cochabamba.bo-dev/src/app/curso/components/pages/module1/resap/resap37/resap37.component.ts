@@ -22,7 +22,6 @@ export class Resap37Component {
 
     constructor(
         private authService: AuthService,
-        private fb: FormBuilder,
         private modal_resap: MosalResap37Service,
     ) {
         this.fechaActual = new Date();

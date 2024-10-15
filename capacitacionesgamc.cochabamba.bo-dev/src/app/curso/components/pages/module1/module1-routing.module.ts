@@ -10,6 +10,7 @@ import { Resap37Component } from './resap/resap37/resap37.component';
 import { ResapListComponent } from './resap/resap-list/resap-list.component';
 import { Resap33Component } from './resap/resap33/resap33.component';
 import { SolicitudesLlenadasComponent } from './solicitudes-llenadas/solicitudes-llenadas.component';
+import { GeneracionGraficoComponent } from './resap/generacion-grafico/generacion-grafico.component';
 
 const routes: Routes = [
     { path: '', component: HomeComponent },
@@ -23,7 +24,6 @@ const routes: Routes = [
     { path: 'empleado/capacitacion', component: CapacitacionComponent },
     { path: 'criterio_evaluacion', component: CriterioEvaluacionComponent },
     { path: 'prueba', component: ResapListComponent },
-    { path: 'resap37', component: Resap37Component },
     { path: 'resap33', component: Resap33Component },
     { path: 'solicitudes_llenadas', component: SolicitudesLlenadasComponent},
 ];
