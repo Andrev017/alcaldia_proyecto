@@ -6,11 +6,10 @@ import { CapacitacionComponent } from './capacitacion/capacitacion.component';
 import { InscripcionComponent } from './inscripcion/inscripcion.component';
 import { FuncionarioComponent } from './funcionario/funcionario.component';
 import { CriterioEvaluacionComponent } from './criterio-evaluacion/criterio-evaluacion.component';
-import { Resap37Component } from './resap/resap37/resap37.component';
 import { ResapListComponent } from './resap/resap-list/resap-list.component';
 import { Resap33Component } from './resap/resap33/resap33.component';
 import { SolicitudesLlenadasComponent } from './solicitudes-llenadas/solicitudes-llenadas.component';
-import { GeneracionGraficoComponent } from './resap/generacion-grafico/generacion-grafico.component';
+import { ModalResap33Component } from './resap/modal-resap33/modal-resap33.component';
 
 const routes: Routes = [
     { path: '', component: HomeComponent },
@@ -26,6 +25,8 @@ const routes: Routes = [
     { path: 'prueba', component: ResapListComponent },
     { path: 'resap33', component: Resap33Component },
     { path: 'solicitudes_llenadas', component: SolicitudesLlenadasComponent},
+
+    
 ];
 
 @NgModule({

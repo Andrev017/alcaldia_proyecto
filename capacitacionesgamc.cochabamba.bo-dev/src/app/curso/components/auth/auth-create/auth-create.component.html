@@ -1,6 +1,7 @@
 <div class="surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden">
     <div class="flex flex-column align-items-center justify-content-center">
-        <div style="border-radius:56px; padding:0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%);">
+        <div
+            style="border-radius:56px; padding:0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%);">
             <div class="w-full surface-card py-8 px-5 sm:px-8" style="border-radius:53px">
 
                 <div class="text-center mb-5">
@@ -9,30 +10,33 @@
                     <span class="text-600 font-medium">Registro</span>
                 </div>
 
-<div>
-<form [formGroup]="reactiveform"  (ngSubmit)="saveEmployee()" >
+                <div>
+                    <form [formGroup]="reactiveform" (ngSubmit)="saveEmployee()">
 
-        <div class="field p-fluid mt-4">
-                <label for="ci" class="md:w-30rem block text-900 text-xl font-medium mb-2">Carnet Identidad</label>
-                <input id="ci" type="text" style="padding:1rem"  formControlName="ci" pInputText aria-describedby="username-help" (change)="buscarNombre($event)" />
-                <small id="username-help" class="p-error" *ngIf="shouldShowError('ci')">{{ getErrorMessage('ci') }}</small>
-        </div>
-                
-                <!-- <mat-form-field class="example-full-width">
+                        <div class="field p-fluid mt-4">
+                            <label for="ci" class="md:w-30rem block text-900 text-xl font-medium mb-2">Carnet
+                                Identidad</label>
+                            <input id="ci" type="text" style="padding:1rem" formControlName="ci" pInputText
+                                aria-describedby="username-help" (change)="buscarNombre($event)" />
+                            <small id="username-help" class="p-error" *ngIf="shouldShowError('ci')">{{
+                                getErrorMessage('ci') }}</small>
+                        </div>
+
+                        <!-- <mat-form-field class="example-full-width">
                     <input matInput formControlName="ci" placeholder="Carnet de Identidad" type="number"/>
                 </mat-form-field>
                 <app-error-message [control]="empform.get('ci')!"></app-error-message> -->
-            
-            <!-- <div class="col-md-2">
+
+                        <!-- <div class="col-md-2">
                 <mat-form-field class="example-full-width">
                     <input matInput placeholder="complemento" type="text">
                 </mat-form-field>
             </div> -->
-            <!-- <div class="field p-fluid mt-4">
+                        <!-- <div class="field p-fluid mt-4">
                 <label for="nombre" class="block text-900 text-xl font-medium mb-2" >Nombre</label>
                 <input type="text"  style="padding:1rem" pInputText aria-describedby="username-help"  />
             </div>                                 -->
-            <!-- <div class="row">
+                        <!-- <div class="row">
                 <div class="col-md-6">
                   <mat-form-field class="example-full-width">
                     <input matInput placeholder="Apellido Paterno" type="text">
@@ -44,41 +48,44 @@
                   </mat-form-field>
                 </div>                                
             </div> -->
-            <div class="field p-fluid mt-4">
-                <label for="email01" class="block text-900 text-xl font-medium mb-2">Email</label>
-                <input id="email01" type="email"  style="padding:1rem" pInputText aria-describedby="username-help" formControlName="email"/>
-                <small class="p-error" *ngIf="shouldShowError('email')"  >{{ getErrorMessage('email') }}</small>
-            </div>
-            <div class="field p-fluid mt-4">
-                <label for="password01" class="block text-900 text-xl font-medium mb-2" >Contraseña</label>
-                <input id="password01" type="password"  style="padding:1rem" pInputText aria-describedby="username-help" formControlName="password"/>
-                <small class="p-error" *ngIf="shouldShowError('password')"  >{{ getErrorMessage('password') }}</small>
+                        <div class="field p-fluid mt-4">
+                            <label for="email01" class="block text-900 text-xl font-medium mb-2">Email</label>
+                            <input id="email01" type="email" style="padding:1rem" pInputText
+                                aria-describedby="username-help" formControlName="email" />
+                            <small class="p-error" *ngIf="shouldShowError('email')">{{ getErrorMessage('email')
+                                }}</small>
+                        </div>
+                        <div class="field p-fluid mt-4">
+                            <label for="password01" class="block text-900 text-xl font-medium mb-2">Contraseña</label>
+                            <input id="password01" type="password" style="padding:1rem" pInputText
+                                aria-describedby="username-help" formControlName="password" />
+                            <small class="p-error" *ngIf="shouldShowError('password')">{{ getErrorMessage('password')
+                                }}</small>
 
-                <!-- <mat-form-field class="example-full-width">
+                            <!-- <mat-form-field class="example-full-width">
                     <input matInput formControlName="password" placeholder="password" type="password">
                 </mat-form-field>
                 <app-error-message [control]="empform.get('password')!"></app-error-message>                                 -->
-            </div>
-            <!-- <button mat-raised-button color="btn btn-danger pull-right" (click)="saveEmployee()">
+                        </div>
+                        <!-- <button mat-raised-button color="btn btn-danger pull-right" (click)="saveEmployee()">
                 Registrar
               </button> -->
-            <!-- <button mat-button (click)="subCancel()" color="btn btn-danger pull-right">
+                        <!-- <button mat-button (click)="subCancel()" color="btn btn-danger pull-right">
                 Cancel
               </button>  -->
-  
-        
-        
-        <p-button label="Registrar" icon="pi pi-check" type="submit"></p-button>
-        <p-button label="Cancelar" icon="pi pi-times" styleClass="p-button-secondary" [style]="{'margin-left': '.5em'}" (click)="subCancel()"></p-button>
-</form>
+
+
+
+                        <p-button label="Registrar" icon="pi pi-check" type="submit"></p-button>
+                        <p-button label="Cancelar" icon="pi pi-times" styleClass="p-button-secondary"
+                            [style]="{'margin-left': '.5em'}" (click)="subCancel()"></p-button>
+                    </form>
                 </div>
 
-                
+
 
 
             </div>
-        </div>       
-    </div>    
+        </div>
+    </div>
 </div>
-
-

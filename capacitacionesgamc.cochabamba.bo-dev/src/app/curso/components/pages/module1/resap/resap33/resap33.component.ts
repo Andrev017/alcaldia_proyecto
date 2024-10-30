@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Table } from 'primeng/table';
 import { ModalResap33Service } from 'src/app/curso/service/resap/modal-resap33.service';
 import { HabilitarResap33Service } from 'src/app/curso/service/resap/habilitar-resap33.service';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms'; // Importar Reactive Forms
 
 @Component({
     selector: 'app-resap33',
@@ -10,11 +11,19 @@ import { HabilitarResap33Service } from 'src/app/curso/service/resap/habilitar-r
 })
 export class Resap33Component implements OnInit {
     isToggleEnabled = false;
+    miFormulario: FormGroup; // Declarar el FormGroup
 
     constructor(
         private modal_resap33: ModalResap33Service,
-        private toggleService: HabilitarResap33Service
-    ) {}
+        private toggleService: HabilitarResap33Service,
+        private fb: FormBuilder // Inyectar FormBuilder
+    ) {
+        // Inicializa el FormGroup en el constructor
+        this.miFormulario = this.fb.group({
+            nombre: ['', Validators.required], // Ejemplo de control de formulario
+            gestion: ['', Validators.required], // Otro control
+        });
+    }
 
     ngOnInit() {
         this.toggleService.toggleState$.subscribe((state) => {
@@ -34,5 +43,20 @@ export class Resap33Component implements OnInit {
             (event.target as HTMLInputElement).value,
             'contains'
         );
+    }
+
+    verRegistro() {
+        // Implementa la lógica para ver el registro
+    }
+
+    generarPDF() {
+        // Implementa la lógica para generar el PDF
+    }
+
+    onSubmit() {
+        if (this.miFormulario.valid) {
+            console.log(this.miFormulario.value);
+            // Maneja la lógica de envío aquí
+        }
     }
 }

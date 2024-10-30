@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { Resap33Component } from '../../components/pages/module1/resap/resap33/resap33.component';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
     providedIn: 'root',
@@ -8,6 +10,7 @@ import { Resap33Component } from '../../components/pages/module1/resap/resap33/r
 export class ModalResap33Service {
     private malo = Resap33Component;
     private visibilitySubject = new Subject<boolean>();
+
     visibilityChange = this.visibilitySubject.asObservable();
 
     show() {

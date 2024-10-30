@@ -1,14 +1,12 @@
-<h3 class="p-text-center">Solicitud de Capacitaciones </h3>
+<h3 class="p-text-center">Solicitud de Capacitaciones</h3>
 <div class="grid">
     <div class="col-12">
         <div class="card px-6 py-6">
             <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
-
                     <div class="my-2 d-flex align-items-center">
                         <!-- ------------ PARA ABRIR el MODAL ----------- -->
-                        <div style="display: flex; width: 100%;">
-
+                        <div styleClass="display: flex; width: 100%;">
                             <button pButton pRipple icon="pi pi-plus" label="Llenar Nuevo Registro"
                                 class="p-button-success mr-2" (click)="abrirModalOp()"
                                 [disabled]="!isToggleEnabled"></button>
@@ -18,18 +16,13 @@
                 </ng-template>
             </p-toolbar>
 
-
-
-
-
             <!-- ----------------------- PARTE DE LA TABLA ---------------------------  -->
-            <h5>Registros Realizados por Gestion</h5>
+            <h5>Registros Realizados por Gestión</h5>
             <p-table #dt1 [rows]="10" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true"
-                [globalFilterFields]="['codigo','Nombre','Gestion']" responsiveLayout="scroll">
+                [globalFilterFields]="['codigo', 'Nombre', 'Gestion']" responsiveLayout="scroll">
 
                 <ng-template pTemplate="caption">
                     <div class="flex justify-content-between flex-column sm:flex-row">
-
                         <button pButton label="Clear" class="p-button-outlined mb-2" icon="pi pi-filter-slash"></button>
                         <span class="p-input-icon-left mb-2">
                             <i class="pi pi-search"></i>
@@ -38,46 +31,45 @@
                         </span>
                     </div>
                 </ng-template>
+
                 <ng-template pTemplate="header">
                     <tr>
-                        <th style="min-width: 8rem">
+                        <th styleClass="min-width: 8rem">
                             <div class="flex justify-content-between align-items-center">
                                 Registro
                             </div>
                         </th>
-                        <th style="min-width: 14rem">
+                        <th styleClass="min-width: 14rem">
                             <div class="flex justify-content-between align-items-center">
-                                Gestion
+                                Gestión
                             </div>
                         </th>
-                        <th style="min-width: 4rem">
+                        <th styleClass="min-width: 4rem">
                             <div class="flex justify-content-between align-items-center">
-                                Accion
+                                Acción
                             </div>
                         </th>
                     </tr>
-
-
-                    <tr>
-                        <th>
-                            <label class="text-700 w-10 md:w-4 font-bold">Nobre del regsitro 1</label>
-                        </th>
-                        <th>
-                            <label class="text-700 w-10 md:w-4 font-bold">Numero de la Gestion 1</label>
-                        </th>
-                        <th style="display: flex; justify-content: center; margin: 0 auto;">
-                            <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-success m-1"
-                                title="Ver"></button>
-                            <p-button icon="pi pi-print" class="p-button-rounded p-button-success m-1"
-                                title="PDF"></p-button>
-                        </th>
-                    </tr>
-
-
                 </ng-template>
+
+                <ng-template pTemplate="body" let-rowData>
+                    <tr>
+                        <td>
+                            <label class="text-700 w-10 md:w-4 font-bold">asdawda</label>
+                        </td>
+                        <td>
+                            <label class="text-700 w-10 md:w-4 font-bold"> asfjalsfj</label>
+                        </td>
+                        <td styleClass="display: flex; justify-content: center; margin: 0 auto;">
+                            <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-success m-1"
+                                title="Ver" (click)="verRegistro()"></button>
+                            <button pButton icon="pi pi-print" class="p-button-rounded p-button-success m-1" title="PDF"
+                                (click)="generarPDF()"></button>
+                        </td>
+                    </tr>
+                </ng-template>
+
             </p-table>
         </div>
     </div>
 </div>
-<!-- ver el tema de los roles para que se muestre en el lado administrador y el
-    formulario la parte de usuario -->
