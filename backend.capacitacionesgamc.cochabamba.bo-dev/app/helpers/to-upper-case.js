@@ -1,7 +1,7 @@
-const toUpperCase = (data=  {}) => {
+const toUpperCase = (data = {}) => {
     for (let i in data) {
         if (typeof data[i] === 'string' && i != 'email' && i != 'password' && i != 'img' && i != 'location') {
-          data[i] = data[i].toUpperCase().trim().replace(/\s\s+/g, ' ');
+            data[i] = data[i].toUpperCase().trim().replace(/\s\s+/g, ' ');
         } else if (typeof data[i] === "object") {
             toUpperCase(data[i]);
         }

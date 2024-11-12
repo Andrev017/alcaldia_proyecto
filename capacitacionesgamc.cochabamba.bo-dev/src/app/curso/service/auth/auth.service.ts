@@ -77,8 +77,8 @@ export class AuthService {
         // )
         /*
     subscribe( (resp) => {
-      result= new PayloadForSuccessfulAuthentication(resp.id,resp.id_empleado, resp.);
-      AuthService.saveAuthenticationInformation(resp);
+        result= new PayloadForSuccessfulAuthentication(resp.id,resp.id_empleado, resp.);
+        AuthService.saveAuthenticationInformation(resp);
     }) */
     }
 

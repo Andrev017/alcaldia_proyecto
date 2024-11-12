@@ -79,8 +79,8 @@
                 <div class="surface-section">
                     <div class="flex align-items-center justify-content-center surface-border flex-wrap">
 
-                        <textarea rows="5" pInputText [(ngModel)]="conocimiento3" style="width: 600px;"
-                            formControlName="text" (keydown)="enumeracion($event)">1. </textarea>
+                        <textarea rows="5" pInputText style="width: 600px;" formControlName="text"
+                            (keydown)="enumeracion($event)">1. </textarea>
 
                     </div>
                 </div>
@@ -107,7 +107,7 @@
                         <label>
                             Otro:
                             <input type="text" pInputText [(ngModel)]="nuevoConocimiento2"
-                                style="width: 550px; margin-left: 60px;" (input)="cambioEtrada()"
+                                style="width: 300px; margin-left: 70px;" (input)="cambioEtrada()"
                                 [disabled]="listConocim !== null" />
                         </label>
 
@@ -152,7 +152,6 @@
 
 
             <!-- ---------------------------------------PREGUNTA 3 --------------------------------------------------------------------------- -->
-
             <!-- <p-fieldset legend=" 3.  Las funciones realizadas, a su criterio, qué conocimientos demandan por el Trabajador y/o Servidor 
             Público Municipal. La prioridad podría ser alta, media o baja" [toggleable]="true">
 
@@ -293,6 +292,7 @@
                         <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
                             <tr>
                                 <td>{{ item.funcion }}</td>
+
                                 <td>{{ item.conocimiento }}</td>
                                 <td>
                                     <p-radioButton value="Alto" [(ngModel)]="item.prioridad"
@@ -330,7 +330,7 @@
                 <div class="flex flex-column py-0 px-2 surface-border">
                     <label>Materia:
                         <p-dropdown [options]="conocimiento_data" [(ngModel)]="listConocim" optionLabel="name"
-                            placeholder="Listado Conocimiento predefinidos" style="margin-left: 10px;"
+                            placeholder="Listado Conocimiento predefinidos" style="margin-left: 30px;"
                             (onChange)="cambioDropdown()" [disabled]="nuevoConocimiento4.trim() !== ''">
                         </p-dropdown>
                     </label><br />
@@ -338,7 +338,7 @@
                     <div class="flex justify-content-between flex-column sm:flex-row">
                         <label>Otro:
                             <input type="text" pInputText [(ngModel)]="nuevoConocimiento4"
-                                style="width: 550px; margin-left: 60px;" (input)="cambioEtradaPregunta4()"
+                                style="width: 300px; margin-left: 50px;" (input)="cambioEtradaPregunta4()"
                                 [disabled]="listConocim !== null" />
                         </label>
 

@@ -46,15 +46,15 @@ export class ModalResap33Component implements OnInit {
     listConocim: any;
 
     sector = [
-        { name: 'Operativo', code: '' },
-        { name: 'Administrativo', code: '' },
+        { name: 'SECTOR OPERATIVO', code: '' },
+        { name: 'SECTOR ADMINISTRATIVO', code: '' },
     ];
 
-    prioridad = [
-        { name: 'Alta', code: 'al' },
-        { name: 'Medio', code: 'me' },
-        { name: 'Bajo', code: 'ba' },
-    ];
+    // prioridad = [
+    //     { name: 'Alta', code: 'al' },
+    //     { name: 'Medio', code: 'me' },
+    //     { name: 'Bajo', code: 'ba' },
+    // ];
 
     conocimiento_data = [
         { name: 'Curso 1', code: 'c1' },

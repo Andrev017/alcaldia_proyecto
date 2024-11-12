@@ -7,35 +7,35 @@ const paginate = async (model, pageSize, pageLimit, type, query, optionsDb = {})
         // search obj
         let search = {};
         let where = {};
-        if(type) {
-            if(type.includes('.')){
-                type = '$'+type+'$';
-            } 
-            if(!isNaN(query)){
+        if (type) {
+            if (type.includes('.')) {
+                type = '$' + type + '$';
+            }
+            if (!isNaN(query)) {
                 where[type] = { [Op.eq]: `${query}` };
             } else {
-                if(new Date(query) != 'Invalid Date'){
+                if (new Date(query) != 'Invalid Date') {
                     let date;
-                    date = new Date(query) ;
+                    date = new Date(query);
                     where[type] = {
                         [Op.gt]: new Date(query),
                         [Op.lt]: date.setDate(date.getDate() + 1)
-                      };
+                    };
                 } else {
-                    where[type] = { [Op.iLike]: `%${query}%`};
+                    where[type] = { [Op.iLike]: `%${query}%` };
                 }
             }
             try {
                 optionsDb.where[Op.and].push(where);
                 where = optionsDb.where;
             } catch (error) {
-                if(optionsDb.where) {
-                    for(const [key, value] of Object.entries(optionsDb.where)){
-                        where[key] =  value
+                if (optionsDb.where) {
+                    for (const [key, value] of Object.entries(optionsDb.where)) {
+                        where[key] = value
                     }
                 }
             }
-            search = { where}
+            search = { where }
             delete optionsDb.where;
         }
         // create an options object
@@ -47,15 +47,15 @@ const paginate = async (model, pageSize, pageLimit, type, query, optionsDb = {})
         };
         // check if the search object is empty
         if (Object.keys(search).length) {
-            options = {...options, ...search};
+            options = { ...options, ...search };
         }
         // take in the model, take in the options
-        let {count, rows} = await model.findAndCountAll(options);
+        let { count, rows } = await model.findAndCountAll(options);
         return {
             previousPage: getPreviousPage(page),
             currentPage: page,
             nextPage: getNextPage(page, limit, count),
-            total: typeof count === 'number'?count: count.length,
+            total: typeof count === 'number' ? count : count.length,
             per_page: limit,
             from: getFrom(page, limit),
             to: getNextOffset(page, limit),
@@ -84,11 +84,11 @@ const getNextOffset = (page, limit) => {
 }
 
 const getOffset = (page, limit) => {
- return (page * limit) - limit;
+    return (page * limit) - limit;
 }
 
 const getNextPage = (page, limit, total) => {
-    if ((total/limit) > page) {
+    if ((total / limit) > page) {
         return page + 1;
     }
     return null

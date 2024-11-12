@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { ModalGraficoService } from 'src/app/curso/service/resap/modal-grafico.service';
 import { Chart, registerables } from 'chart.js';
+import { Table } from 'primeng/table';
 import { SortEvent } from 'primeng/api';
 
 Chart.register(...registerables);
@@ -13,8 +14,12 @@ Chart.register(...registerables);
 export class GeneracionGraficoComponent implements OnInit {
     public barChart: any;
     products: any;
+    loading: boolean = false;
 
     isVisible: boolean = false; //-----------------PARTE DE MODAL----------------------------
+
+    @ViewChild('filter') filter!: ElementRef;
+
 
     constructor(private modal_grafico: ModalGraficoService) {
         //----------------------------------PARTE DEL MODAL-----------------------
@@ -43,6 +48,18 @@ export class GeneracionGraficoComponent implements OnInit {
     //--------------------------------PARTE DEL MODAL------------
     closeModal() {
         this.modal_grafico.hide();
+    }
+
+    clear(table: Table) {
+        table.clear();
+        this.filter.nativeElement.value = '';
+    }
+
+    onGlobalFilter(table: Table, event: Event) {
+        table.filterGlobal(
+            (event.target as HTMLInputElement).value,
+            'contains'
+        );
     }
 
     createChart() {

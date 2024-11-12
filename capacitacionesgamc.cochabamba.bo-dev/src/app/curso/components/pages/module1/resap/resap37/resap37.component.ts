@@ -5,7 +5,6 @@ import { AuthService } from 'src/app/curso/service/auth/auth.service';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { MosalResap37Service } from 'src/app/curso/service/resap/mosal-resap37.service';
 
-
 @Component({
     selector: 'app-resap37',
     templateUrl: './resap37.component.html',
@@ -22,7 +21,7 @@ export class Resap37Component {
 
     constructor(
         private authService: AuthService,
-        private modal_resap: MosalResap37Service,
+        private modal_resap: MosalResap37Service
     ) {
         this.fechaActual = new Date();
 
@@ -30,17 +29,20 @@ export class Resap37Component {
             this.auth = auth; //muestra del nombre del que inicia
         });
         //----------------------------------PARTE DEL MODAL-----------------------
-        this.modal_resap.visibilityChange.subscribe(
-            (isVisible: boolean) => {
-                this.isVisible = isVisible;
-            }
-        ); //-----------------------------------------------------------------
+        this.modal_resap.visibilityChange.subscribe((isVisible: boolean) => {
+            this.isVisible = isVisible;
+        }); //-----------------------------------------------------------------
     }
 
     //--------------------------------PARTE DEL MODAL------------
     closeModal() {
         this.modal_resap.hide();
-    } //-------------------------------------------------------
+    }
+    guardar() {
+        alert('Reasp Guardado');
+        this.closeModal();
+    }
+    //-------------------------------------------------------
 
     ngOnInit(): void {
         setInterval(() => {

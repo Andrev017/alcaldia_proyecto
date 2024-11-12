@@ -33,9 +33,6 @@ export class AppMenuComponent implements OnInit {
         this.model = this.auth.menu; //ROUTES.filter(menuItem => menuItem.roles.includes(userRole));
 
 
-        this.model.push({
-            label: 'Solicitud Capacitaciones',
-        });
         //}else{
         //const toke = this.jwtHelper.decodeToken( localStorage.getItem("profanis_auth") );
 

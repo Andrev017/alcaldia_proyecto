@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { Table } from 'primeng/table';
 import { ModalResap33Service } from 'src/app/curso/service/resap/modal-resap33.service';
 import { HabilitarResap33Service } from 'src/app/curso/service/resap/habilitar-resap33.service';
@@ -12,6 +12,9 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms'; // Importar
 export class Resap33Component implements OnInit {
     isToggleEnabled = false;
     miFormulario: FormGroup; // Declarar el FormGroup
+    loading: boolean = true;
+
+    @ViewChild('filter') filter!: ElementRef;
 
     constructor(
         private modal_resap33: ModalResap33Service,
@@ -59,4 +62,11 @@ export class Resap33Component implements OnInit {
             // Maneja la lógica de envío aquí
         }
     }
+    
+    clear(table: Table) {
+        table.clear();
+        this.filter.nativeElement.value = '';
+    }
+    
+
 }

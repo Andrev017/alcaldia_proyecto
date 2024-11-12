@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { Table } from 'primeng/table';
 import { HabilitarResap33Service } from 'src/app/curso/service/resap/habilitar-resap33.service';
 import { ModalGraficoService } from 'src/app/curso/service/resap/modal-grafico.service';
+import { SortEvent } from 'primeng/api';
 
 @Component({
     selector: 'app-solicitudes-llenadas',
@@ -11,11 +12,14 @@ import { ModalGraficoService } from 'src/app/curso/service/resap/modal-grafico.s
 export class SolicitudesLlenadasComponent implements OnInit {
     isChecked: boolean = false;
     isToggleEnabled = false;
+    loading: boolean = false;//CAMBIAR A TRUE Y VERIFICAR SI FUNCIONA
 
     stateOptions = [
         { name: 'Operativo', code: '' },
         { name: 'Administrativo', code: '' },
     ];
+
+    @ViewChild('filter') filter!: ElementRef;
 
     constructor(
         private toggleService: HabilitarResap33Service,
@@ -43,4 +47,11 @@ export class SolicitudesLlenadasComponent implements OnInit {
         console.log('Modal abierto');
         this.modal_grafico.show();
     }
+
+    clear(table: Table) {
+        table.clear();
+        this.filter.nativeElement.value = '';
+    }
+
+
 }

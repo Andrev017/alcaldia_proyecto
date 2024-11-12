@@ -5,136 +5,135 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 //import { ProductService } from 'src/app/demo/service/product.service';
 import { Table } from 'primeng/table';
 import { CursoService } from 'src/app/curso/service/cursos/curso.service';
-import {CurResponse, Curso, Cursos } from 'src/app/curso/api/curso.model';
+import { CurResponse, Curso, Cursos } from 'src/app/curso/api/curso.model';
 import { MessageService } from 'primeng/api';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { CursosCreateComponent } from '../cursos-create/cursos-create.component';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-cursos-list',
-  templateUrl: './cursos-list.component.html',
-  styleUrls: ['./cursos-list.component.scss'],
-  providers: [DialogService, MessageService]
+    selector: 'app-cursos-list',
+    templateUrl: './cursos-list.component.html',
+    styleUrls: ['./cursos-list.component.scss'],
+    providers: [DialogService, MessageService],
 })
 export class CursosListComponent {
-  // customers1: Customer[] = [];
+    // customers1: Customer[] = [];
 
-  // customers2: Customer[] = [];
+    // customers2: Customer[] = [];
 
-  // selectedCustomers1: Customer[] = [];
+    // selectedCustomers1: Customer[] = [];
 
-  // selectedCustomer: Customer = {};
+    // selectedCustomer: Customer = {};
 
-  // representatives: Representative[] = [];
+    // representatives: Representative[] = [];
 
-  statuses: any[] = [];
+    statuses: any[] = [];
 
-  // products: Product[] = [];
+    // products: Product[] = [];
 
-  rowGroupMetadata: any;
+    rowGroupMetadata: any;
 
-  expandedRows: expandedRows = {};
+    expandedRows: expandedRows = {};
 
-  activityValues: number[] = [0, 100];
+    activityValues: number[] = [0, 100];
 
-  isExpanded: boolean = false;
+    isExpanded: boolean = false;
 
-  idFrozen: boolean = false;
+    idFrozen: boolean = false;
 
-  loading: boolean = true;
+    loading: boolean = true;
 
-  
-  cursoDialog:boolean=false;
-  public cursos: Curso[] = [];
-  public curso : any = {};
-  submitted: boolean = false;
-  deleteCursoDialog: boolean = false;
-  selectedCursos: Curso[] = [];
-  ref: DynamicDialogRef | undefined;
-  
+    cursoDialog: boolean = false;
+    public cursos: Curso[] = [];
+    public curso: any = {};
+    submitted: boolean = false;
+    deleteCursoDialog: boolean = false;
+    selectedCursos: Curso[] = [];
+    ref: DynamicDialogRef | undefined;
 
-  @ViewChild('filter') filter!: ElementRef;
-  
-  
-  constructor(private service: CursoService,public dialogService: DialogService, private router: Router /*, private messageService: MessageService,*/  ) { 
-    
-    
-  }
+    @ViewChild('filter') filter!: ElementRef;
 
-  ngOnInit() {
-      // this.customerService.getCustomersLarge().then(customerss => {
-      //   console.log(customerss);
-      //     this.customers1 = customerss;
-      //     this.loading = false;
+    constructor(
+        private service: CursoService,
+        public dialogService: DialogService,
+        private router: Router /*, private messageService: MessageService,*/
+    ) {}
 
-      //     // @ts-ignore
-      //     //this.customers1.forEach(customer => customer.date = new Date(customer.date));
-      // });
-      //this.customerService.getCustomersMedium().then(customers => this.customers2 = customers);
-      //this.customerService.getCustomersLarge().then(customers => this.customers3 = customers);
-      //this.productService.getProductsWithOrdersSmall().then(data => this.products = data);
+    ngOnInit() {
+        // this.customerService.getCustomersLarge().then(customerss => {
+        //   console.log(customerss);
+        //     this.customers1 = customerss;
+        //     this.loading = false;
 
-      this.GetAll();
-      this.service.saving.subscribe(r => {      
-      this.GetAll();
-    }); 
+        //     // @ts-ignore
+        //     //this.customers1.forEach(customer => customer.date = new Date(customer.date));
+        // });
+        //this.customerService.getCustomersMedium().then(customers => this.customers2 = customers);
+        //this.customerService.getCustomersLarge().then(customers => this.customers3 = customers);
+        //this.productService.getProductsWithOrdersSmall().then(data => this.products = data);
 
-      
-  }
-  GetAll() {
-    const params = { activo: "", page:"", limit:"" };
-    this.service.getCursosAllParameter(params).then( customers => {
-      //console.log(customers);
-      this.cursos = customers;
-      this.loading = false;
-    } );
-
-  }
-
-  onGlobalFilter(table: Table, event: Event) {
-      table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
-  }
-
-  clear(table: Table) {
-      table.clear();
-      this.filter.nativeElement.value = '';
-  }
-  openNew(code:any){
-
-    this.ref = this.dialogService.open(CursosCreateComponent, {
-      header: code? 'Actualizar Curso' : 'Nuevo Curso',
-      width: '30%',
-      contentStyle: { overflow: 'auto' },
-      baseZIndex: 10000,
-      maximizable: true,
-      data: code,
-    });
-
-    // this.ref.onClose.subscribe((product: Product) => {
-    //     if (product) {
-    //         //this.messageService.add({ severity: 'info', summary: 'Product Selected', detail: product.name });
-    //     }
-    // });
-
-    this.ref.onMaximize.subscribe((value) => {
-        //this.messageService.add({ severity: 'info', summary: 'Maximized', detail: `maximized: ${value.maximized}` });
-    });
-  }
-  ngOnDestroy() {
-    if (this.ref) {
-        this.ref.close();
+        this.GetAll();
+        this.service.saving.subscribe((r) => {
+            this.GetAll();
+        });
     }
-  }
-  
-  FunctionEdit(code: any) {
-    this.openNew(code)
-  }
-  capacitacionCurso(uuid: string){
-    
-    this.router.navigate(['/capacitacion/cursos/capacitacion/', {uuid: uuid }]);
-  }
-  /*openNew() {
+    GetAll() {
+        const params = { activo: '', page: '', limit: '' };
+        this.service.getCursosAllParameter(params).then((customers) => {
+            //console.log(customers);
+            this.cursos = customers;
+            this.loading = false;
+        });
+    }
+
+    onGlobalFilter(table: Table, event: Event) {
+        table.filterGlobal(
+            (event.target as HTMLInputElement).value,
+            'contains'
+        );
+    }
+
+    clear(table: Table) {
+        table.clear();
+        this.filter.nativeElement.value = '';
+    }
+    openNew(code: any) {
+        this.ref = this.dialogService.open(CursosCreateComponent, {
+            header: code ? 'Actualizar Curso' : 'Nuevo Curso',
+            width: '30%',
+            contentStyle: { overflow: 'auto' },
+            baseZIndex: 10000,
+            maximizable: true,
+            data: code,
+        });
+
+        // this.ref.onClose.subscribe((product: Product) => {
+        //     if (product) {
+        //         //this.messageService.add({ severity: 'info', summary: 'Product Selected', detail: product.name });
+        //     }
+        // });
+
+        this.ref.onMaximize.subscribe((value) => {
+            //this.messageService.add({ severity: 'info', summary: 'Maximized', detail: `maximized: ${value.maximized}` });
+        });
+    }
+    ngOnDestroy() {
+        if (this.ref) {
+            this.ref.close();
+        }
+    }
+
+    FunctionEdit(code: any) {
+        this.openNew(code);
+    }
+    capacitacionCurso(uuid: string) {
+        this.router.navigate([
+            '/capacitacion/cursos/capacitacion/',
+            { uuid: uuid },
+        ]);
+    }
+    /*openNew() {
         this.curso = {};
         this.submitted = false;
         this.cursoDialog = true;
@@ -183,52 +182,50 @@ export class CursosListComponent {
         this.curso = {};
     }
   }*/
-  // onSort() {
-  //     this.updateRowGroupMetaData();
-  // }
+    // onSort() {
+    //     this.updateRowGroupMetaData();
+    // }
 
-  // updateRowGroupMetaData() {
-  //     this.rowGroupMetadata = {};
+    // updateRowGroupMetaData() {
+    //     this.rowGroupMetadata = {};
 
-  //     if (this.customers3) {
-  //         for (let i = 0; i < this.customers3.length; i++) {
-  //             const rowData = this.customers3[i];
-  //             const representativeName = rowData?.representative?.name || '';
+    //     if (this.customers3) {
+    //         for (let i = 0; i < this.customers3.length; i++) {
+    //             const rowData = this.customers3[i];
+    //             const representativeName = rowData?.representative?.name || '';
 
-  //             if (i === 0) {
-  //                 this.rowGroupMetadata[representativeName] = { index: 0, size: 1 };
-  //             }
-  //             else {
-  //                 const previousRowData = this.customers3[i - 1];
-  //                 const previousRowGroup = previousRowData?.representative?.name;
-  //                 if (representativeName === previousRowGroup) {
-  //                     this.rowGroupMetadata[representativeName].size++;
-  //                 }
-  //                 else {
-  //                     this.rowGroupMetadata[representativeName] = { index: i, size: 1 };
-  //                 }
-  //             }
-  //         }
-  //     }
-  // }
+    //             if (i === 0) {
+    //                 this.rowGroupMetadata[representativeName] = { index: 0, size: 1 };
+    //             }
+    //             else {
+    //                 const previousRowData = this.customers3[i - 1];
+    //                 const previousRowGroup = previousRowData?.representative?.name;
+    //                 if (representativeName === previousRowGroup) {
+    //                     this.rowGroupMetadata[representativeName].size++;
+    //                 }
+    //                 else {
+    //                     this.rowGroupMetadata[representativeName] = { index: i, size: 1 };
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
 
-  // expandAll() {
-  //     if (!this.isExpanded) {
-  //         //this.products.forEach(product => product && product.name ? this.expandedRows[product.name] = true : '');
+    // expandAll() {
+    //     if (!this.isExpanded) {
+    //         //this.products.forEach(product => product && product.name ? this.expandedRows[product.name] = true : '');
 
-  //     } else {
-  //         this.expandedRows = {};
-  //     }
-  //     this.isExpanded = !this.isExpanded;
-  // }
+    //     } else {
+    //         this.expandedRows = {};
+    //     }
+    //     this.isExpanded = !this.isExpanded;
+    // }
 
-  // formatCurrency(value: number) {
-  //     return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
-  // }
-
- 
+    // formatCurrency(value: number) {
+    //     return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+    // }
 }
 
 interface expandedRows {
-  [key: string]: boolean;
+    [key: string]: boolean;
 }

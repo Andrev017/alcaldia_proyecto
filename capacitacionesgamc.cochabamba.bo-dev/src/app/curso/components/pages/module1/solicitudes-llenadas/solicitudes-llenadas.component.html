@@ -5,7 +5,7 @@
         </div>
         <div class="card">
 
-            <p-toolbar styleClass="mb-4">
+            <p-toolbar styleClass="mb-3">
 
                 <div class="flex justify-content-between flex-column sm:flex-row">
                     <div style="margin-top: 9px;">
@@ -23,12 +23,23 @@
 
             <!-- ----------------------- PARTE DE LA TABLA ---------------------------  -->
             <h5>Solicitudes Llenadas </h5>
-            <p-table #dt1 [rows]="10" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true"
-                [globalFilterFields]="['codigo','Nombre','Gestion']" responsiveLayout="scroll">
+
+
+            <p-table #dt1 dataKey="id" [rows]="10" [loading]="loading" [rowHover]="true"
+                styleClass="p-datatable-gridlines" [paginator]="true"
+                [globalFilterFields]="['gestion','nombre']" responsiveLayout="scroll">
+
                 <ng-template pTemplate="caption">
                     <div class="flex justify-content-between flex-column sm:flex-row">
 
-                        <button pButton label="Clear" class="p-button-outlined mb-2" icon="pi pi-filter-slash"></button>
+                        <button pButton label="Clear" class="p-button-outlined mb-2" icon="pi pi-filter-slash"
+                            (click)="clear(dt1)"></button>
+
+                        <button pButton pRipple icon="pi pi-chart-bar" label="Generar Grafico"
+                            class="p-button-success mb-2" (click)="abrirModalGrafico()"></button>
+
+                        <button pButton pRipple icon="pi pi-file-pdf" label="Generar pdf"
+                            class="p-button mb-2"></button>
 
 
                         <span class="p-input-icon-left mb-2">
@@ -41,46 +52,61 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
-                        <th style="min-width: 8rem">
+                        <th style="min-width: 12rem">
                             <div class="flex justify-content-between align-items-center">
-                                Nombre
+                                Gestion
+                                <p-columnFilter type="text" field="gestion" display="menu"
+                                    placeholder="Año de gestioin"></p-columnFilter>
                             </div>
                         </th>
-                        <th style="min-width: 8rem">
+                        <th style="min-width: 12rem">
                             <div class="flex justify-content-between align-items-center">
-                                N° Identidad
+                                Nombre Completo
+                                <p-columnFilter type="text" field="nombre" display="menu"
+                                    placeholder="Nombre completo"></p-columnFilter>
                             </div>
                         </th>
-                        <th style="min-width: 8rem">
+                        <th style="min-width: 12rem">
                             <div class="flex justify-content-between align-items-center">
-                                Unidad del Empleado
+                                N° de Carnet
+                                <p-columnFilter type="text" field="#" display="menu"
+                                    placeholder="Buscar N° de carnet"></p-columnFilter>
                             </div>
                         </th>
-                        <th style="min-width: 8rem">
+                        <th style="min-width: 10rem">
                             <div class="flex justify-content-between align-items-center">
-                                Curso Solicitado
-                            </div>
-                        </th>
-                        <th style="min-width: 8rem">
-                            <div class="flex justify-content-between align-items-center">
-                                Opciones
+                                Acción
                             </div>
                         </th>
                     </tr>
-                    <tr>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th style="display: flex; justify-content: center; margin: 0 auto;">
 
-                            <button pButton pRipple icon="pi pi-chart-bar" title="Generar Grafico"
-                                class="p-button-rounded p-button-success m-1" (click)="abrirModalGrafico()"></button>
-
-                        </th>
-                    </tr>
                 </ng-template>
-            </p-table>
+                <ng-template pTemplate="body" let-product>
+                    <tr>
+                        <td>
+                            {{product.code}}
+                        </td>
+                        <td>
+                            {{product.name}}
+                        </td>
+                        <td>
+                            {{product.category}}
+                        </td>
+                        <td>
+                            <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-info m-1"
+                                title="Editar"></button>
+
+                            <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger m-1"
+                                title="Eliminar"></button>
+
+                            <button pButton pRipple icon="pi pi-file-pdf" title="Generar PDF" class="p-button mr-2"
+                                (click)="abrirModalGrafico()"></button>
+                        </td>
+                    </tr>
+                
+                </ng-template>
+            </p-table><br>
+
         </div>
     </div>
 </div>
