@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class ApiService {
     private apiUrl =
-        'https://appgamc.cochabamba.bo/transparencia/servicio/buscar-empleados.php';
+        'https://appgamc.cochabamba.bo/transparencia/servicio/buscar-empleados.';
     constructor(private http: HttpClient) {}
 
     sendPostRequest(data: any): Observable<any> {

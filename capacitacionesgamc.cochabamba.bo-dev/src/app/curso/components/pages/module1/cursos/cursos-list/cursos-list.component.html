@@ -19,6 +19,7 @@
         responsiveLayout="scroll">
         <ng-template pTemplate="caption">
             <div class="flex justify-content-between flex-column sm:flex-row">
+
                 <button pButton label="Clear" class="p-button-outlined mb-2" icon="pi pi-filter-slash"
                     (click)="clear(dt1)"></button>
 
@@ -29,6 +30,7 @@
                 </span>
             </div>
         </ng-template>
+
         <ng-template pTemplate="header">
             <tr>
                 <th style="min-width: 12rem">
@@ -92,8 +94,8 @@
                 <td>
                     {{customers.nombre}}
                 </td>
-                <td> 
-                    {{customers.contenido}} 
+                <td>
+                    {{customers.contenido}}
                 </td>
                 <td>
                     {{customers.dirigido}}
@@ -104,8 +106,6 @@
 
                     <button pButton pRipple icon="pi pi-eject" class="p-button-rounded p-button-info"
                         (click)="capacitacionCurso(customers.uuid)" title="Capacitaciones"></button>
-
-
 
                 </td>
             </tr>

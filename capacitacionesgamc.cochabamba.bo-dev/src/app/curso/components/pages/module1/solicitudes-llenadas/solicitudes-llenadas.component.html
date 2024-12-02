@@ -25,9 +25,9 @@
             <h5>Solicitudes Llenadas </h5>
 
 
-            <p-table #dt1 dataKey="id" [rows]="10" [loading]="loading" [rowHover]="true"
+            <p-table #dt1 [value]="llenadoSolid" [rows]="10" [loading]="loading" [rowHover]="true"
                 styleClass="p-datatable-gridlines" [paginator]="true"
-                [globalFilterFields]="['gestion','nombre']" responsiveLayout="scroll">
+                [globalFilterFields]="['gestion','nombre','carnet']" responsiveLayout="scroll">
 
                 <ng-template pTemplate="caption">
                     <div class="flex justify-content-between flex-column sm:flex-row">
@@ -50,6 +50,7 @@
                     </div>
                     <app-generacion-grafico></app-generacion-grafico>
                 </ng-template>
+
                 <ng-template pTemplate="header">
                     <tr>
                         <th style="min-width: 12rem">
@@ -69,7 +70,7 @@
                         <th style="min-width: 12rem">
                             <div class="flex justify-content-between align-items-center">
                                 N° de Carnet
-                                <p-columnFilter type="text" field="#" display="menu"
+                                <p-columnFilter type="text" field="carnet" display="menu"
                                     placeholder="Buscar N° de carnet"></p-columnFilter>
                             </div>
                         </th>
@@ -81,29 +82,30 @@
                     </tr>
 
                 </ng-template>
-                <ng-template pTemplate="body" let-product>
+                <ng-template pTemplate="body" let-llenadoSolid>
                     <tr>
                         <td>
-                            {{product.code}}
+                            {{llenadoSolid.gestion}}
                         </td>
                         <td>
-                            {{product.name}}
+                            {{llenadoSolid.nombre}}
                         </td>
                         <td>
-                            {{product.category}}
+                            {{llenadoSolid.carnet}}
                         </td>
-                        <td>
-                            <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-info m-1"
+                        <td class="text-center">
+                            <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success m-1"
                                 title="Editar"></button>
 
                             <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger m-1"
                                 title="Eliminar"></button>
 
-                            <button pButton pRipple icon="pi pi-file-pdf" title="Generar PDF" class="p-button mr-2"
-                                (click)="abrirModalGrafico()"></button>
+                            <button pButton pRipple icon="pi pi-file-pdf" title="Generar PDF"
+                                class="p-button-rounded p-button m-1" (click)="abrirModalGrafico()"></button>
+
                         </td>
                     </tr>
-                
+
                 </ng-template>
             </p-table><br>
 

@@ -12,7 +12,7 @@ import { SortEvent } from 'primeng/api';
 export class SolicitudesLlenadasComponent implements OnInit {
     isChecked: boolean = false;
     isToggleEnabled = false;
-    loading: boolean = false;//CAMBIAR A TRUE Y VERIFICAR SI FUNCIONA
+    loading: boolean = false; //CAMBIAR A TRUE Y VERIFICAR SI FUNCIONA
 
     stateOptions = [
         { name: 'Operativo', code: '' },
@@ -53,5 +53,26 @@ export class SolicitudesLlenadasComponent implements OnInit {
         this.filter.nativeElement.value = '';
     }
 
-
+    llenadoSolid = [
+        {
+            gestion: '2023',
+            nombre: 'andre',
+            carnet: 936452,
+        },
+        {
+            gestion: '1995',
+            nombre: 'nicolas',
+            carnet: 336478,
+        },
+        {
+            gestion: '2015',
+            nombre: 'micaela',
+            carnet: 736446,
+        },
+        {
+            gestion: '2008',
+            nombre: 'robert',
+            carnet: 326457,
+        },
+    ];
 }

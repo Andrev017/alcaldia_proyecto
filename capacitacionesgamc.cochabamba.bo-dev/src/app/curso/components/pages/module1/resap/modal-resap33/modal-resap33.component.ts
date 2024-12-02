@@ -5,6 +5,7 @@ import { ModalResap33Service } from 'src/app/curso/service/resap/modal-resap33.s
 // import { ApiService } from './api.service';
 // import { response } from 'express';
 import { FormBuilder } from '@angular/forms';
+import { FuncionarioComponent } from '../../funcionario/funcionario.component';
 
 @Component({
     selector: 'app-modal-resap33',

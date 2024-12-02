@@ -12,7 +12,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms'; // Importar
 export class Resap33Component implements OnInit {
     isToggleEnabled = false;
     miFormulario: FormGroup; // Declarar el FormGroup
-    loading: boolean = true;
+    loading: boolean = false;
 
     @ViewChild('filter') filter!: ElementRef;
 
@@ -62,11 +62,24 @@ export class Resap33Component implements OnInit {
             // Maneja la lógica de envío aquí
         }
     }
-    
+
     clear(table: Table) {
         table.clear();
         this.filter.nativeElement.value = '';
     }
-    
 
+    llenadoReg = [
+        { 
+            registro: 'andre', 
+            gestion: '2023' },
+        {
+            registro: 'zambrano',
+            gestion: '2015',
+        },
+        {
+            registro: 'valeria',
+            gestion: '2002',
+        },
+    ];
+    
 }

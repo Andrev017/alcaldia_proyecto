@@ -138,28 +138,28 @@ export class CursosListComponent {
         this.submitted = false;
         this.cursoDialog = true;
     }
-  editCurso(curso: Curso) {
-      this.curso = { ...curso };
-      this.cursoDialog = true;
-  }
-  deleteCurso(curso: Curso) {
-    this.deleteCursoDialog = true;
-    this.curso = { ...curso };
-  }
-  confirmDeleteSelected() {
-    this.deleteCursoDialog = false;
-    this.cursos = this.cursos.filter(val => !this.selectedCursos.includes(val));
-    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Products Deleted', life: 3000 });
-    this.selectedCursos = [];
-  }
-  confirmDelete() {
-    this.deleteCursoDialog = false;
-    this.cursos = this.cursos.filter(val => val.id !== this.curso.id);
-    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Deleted', life: 3000 });
-    this.curso = {};
-  }
-  saveProduct() {
-    this.submitted = true;
+    editCurso(curso: Curso) {
+        this.curso = { ...curso };
+        this.cursoDialog = true;
+    }
+    deleteCurso(curso: Curso) {
+        this.deleteCursoDialog = true;
+        this.curso = { ...curso };
+    }
+    confirmDeleteSelected() {
+        this.deleteCursoDialog = false;
+        this.cursos = this.cursos.filter(val => !this.selectedCursos.includes(val));
+        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Products Deleted', life: 3000 });
+        this.selectedCursos = [];
+    }
+    confirmDelete() {
+        this.deleteCursoDialog = false;
+        this.cursos = this.cursos.filter(val => val.id !== this.curso.id);
+        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Deleted', life: 3000 });
+        this.curso = {};
+    }
+    saveProduct() {
+        this.submitted = true;
 
     if (this.curso.nombre?.trim()) {
         if (this.curso.id) {

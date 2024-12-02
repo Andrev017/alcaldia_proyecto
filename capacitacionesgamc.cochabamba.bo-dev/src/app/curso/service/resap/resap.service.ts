@@ -11,11 +11,13 @@ import { map, tap, catchError} from 'rxjs/operators';
 export class ResapService {
   private apiUrl : string;
   public saving: EventEmitter<boolean> = new EventEmitter<boolean>();
+
   constructor(private http:HttpClient) { 
     this.apiUrl = `${environment.apiUrls.resap}`;
   }
-  getResapAllParameter(params: any): Observable<Resap[]> {
 
+
+  getResapAllParameter(params: any): Observable<Resap[]> {
     return this.http.get<ResapResponse>(`${this.apiUrl}`, {'params':params}).pipe(
       map(( response ) =>  {
         return response.resap.data;
@@ -27,8 +29,8 @@ export class ResapService {
       )
     );
   }
-  getResapParameter(params: any): Observable<Resap> {
   
+  getResapParameter(params: any): Observable<Resap> {
     return this.http.get<ResapResponse>(`${this.apiUrl}`, {'params':params}).pipe(
       map(( response ) =>  {
         //console.log(response);

@@ -11,9 +11,12 @@ const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric
 const moment = require('moment');
 const { Inscripcion, Curso, sequelize } = require('../database/config');
 const { TipoEvaluacion } = require('../database/config');
+const { request, response, text } = require('express');
+const { alignment } = require('excel4node/distribution/lib/types');
 
 const imagePath = path.join(__dirname, '../../uploads/mpdf/escudo-gamc.png');
 const imagePathCertificado = path.join(__dirname, '../../uploads/certificado.jpg');
+
 
 //  -------------------------------- GENERACION DE CABECERA DE LOS PDF --------------------------------
 const dataPdfReturn = (jobs, userAuth) => [
@@ -35,6 +38,9 @@ const dataPdfReturn = (jobs, userAuth) => [
     // },
     // {   text: `Impreso por: ${userAuth.employee}`, style: 'fechaDoc',
     //     absolutePosition: {  y: 27 }
+    {
+        text: 'Conferencia',
+    },
     // },
     {
         canvas: [{
@@ -48,6 +54,7 @@ const dataPdfReturn = (jobs, userAuth) => [
     { text: 'Form. RESAP 36', absolutePosition: { x: 475, y: 102 } },
     { canvas: [{ type: 'rect', x: 430, y: -45, w: 100, h: 30 }] },
 ];
+//---------------------------------------------------
 const dataPDFresap37 = (jobs, userAuth) => [
     {
         image: 'data:image/png;base64,' + fs.readFileSync(imagePath, 'base64'),
@@ -76,7 +83,6 @@ const dataPDFresap37 = (jobs, userAuth) => [
     { text: 'FECHA |', absolutePosition: { x: 475, y: 102 } },
     { canvas: [{ type: 'rect', x: 430, y: -45, w: 100, h: 30 }] },
 ];
-
 const dataPDFresap33 = (jobs, userAuth) => [
     {
         image: 'data:image/png;base64,' + fs.readFileSync(imagePath, 'base64'),
@@ -154,19 +160,16 @@ const generatePdfReportResap = async (req = request, res = response) => {
 
         const optionsDb2 = {
             order: [['id', 'ASC']],
-            include: [
-                {
-                    association: 'tipo_criterio', attributes: { exclude: ['updatedAt'] },
+            include: [{
+                association: 'tipo_criterio', attributes: { exclude: ['updatedAt'] },
+                include: [{
+                    association: 'criterio_resap', attributes: { exclude: ['updateAt'] },
                     include: [{
-                        association: 'criterio_resap', attributes: { exclude: ['updateAt'] },
-                        include: [{
-                            association: 'inscripcion_resap', attributes: { exclude: ['updateAt'] },
-                            where: { [Op.and]: [{ uuid },] },
-                        }]
+                        association: 'inscripcion_resap', attributes: { exclude: ['updateAt'] },
+                        where: { [Op.and]: [{ uuid },] },
                     }]
-                },
-
-            ]
+                }]
+            }]
         };
         let tipoEva = await TipoEvaluacion.findAll(optionsDb2);
         tipoEva.forEach(resp => {
@@ -227,6 +230,7 @@ const generatePdfReportResap = async (req = request, res = response) => {
             pageOrientation: 'portrait',
         };
 
+
         const printer = new PdfPrinter(fonts);
         let pdfDoc = printer.createPdfKitDocument(docDefinition);
         let chunks = [];
@@ -238,14 +242,220 @@ const generatePdfReportResap = async (req = request, res = response) => {
             return res.send(result);
         });
         pdfDoc.end();
+
     } catch (error) {
         const pathImage = path.join(__dirname, `../../uploads/none-img.jpg`);
         return res.sendFile(pathImage);
     }
 }
 
+// --------------------------  PDF de lso resap ------------------------
 
 const generatePdfResap37 = async (req = request, res = response) => {
+    try {
+        const { status, activo, id } = req.query;
+        const optionsDb1 = {
+            order: [['id', 'ASC']],
+            where: {
+                [Op.and]: [
+                    { id },
+                ],
+            },
+            include: [
+                { association: 'empleados', attributes: { exclude: ['updatedAt'] } },
+
+            ]
+        };
+        let inscReport = await Inscripcion.findAll(optionsDb1);
+        let dataPDF = dataPDFresap37(inscReport, req.userAuth); //PDF         
+        let a = JSON.stringify(inscReport);
+        let b = JSON.parse(a);
+
+        dataPDF.push({ text: 'DATOS DE IDENTIFICACIÓN', style: 'subheader', fontSize: 14, bold: true, });
+        var table1 = {
+            stryle: 'tableExample',
+            table: {
+                headerRows: 2,
+                widths: [200, 284],
+                body: [
+                    [{ text: 'NOMBRE Y APELLIDOS DEL SERVIDOR PUBLICO MUNICIPAL', bold: true }, b[0].empleados.nombre + otro_nombre + paterno + materno],
+                    [{ text: 'NOMBRE DEL PUESTO QUE OCUPA', bold: true }, b[0].empleados.cargo],
+                    [{ text: 'NOMBRE DEL INMEDIATO SUPERIOR', bould: true }]
+                    [{ text: 'PUESTO DEL INMEDIATO SUPERIOR', bould: true }]
+                ]
+            }
+        };
+        dataPDF.push(table1);
+
+
+
+
+        const optionsDb2 = {
+            order: [['id', 'ASC']],
+            include: [
+                {
+                    association: 'empleados', attributes: { exclude: ['updatedAt'] },
+                    include: [{
+                        association: 'criterio_resap', attributes: { exclude: ['updateAt'] },
+                    }]
+                },
+            ]
+        };
+        let tipoArea = await Inscripcion.findAll(optionsDb2);
+        dataPdf.push({ text: 'DATOS DEL AREA Y UNIDAD', style: 'subheader', fontSize: 14, bold: true, });
+        var table2 = {
+            style: 'tableExample',
+            table: {
+                headerRows: 2,
+                widths: [200, 284],
+                body: [
+                    [{ text: 'OFICIAL MAYOR', bold: true }, {}],
+                    [{ text: 'DIRECCION', bould: true }, {}]
+                    [{ text: 'DEPARTAMENTO', bould: true }, b[0].empleados.unidad, {}]
+                ]
+            }
+        };
+        dataPdf.push(table2);
+
+
+
+
+        const optionsDb3 = {
+            order: [['id', 'ASC']],
+            where: {
+                [Op.and]: [
+                    { uuid },
+                ],
+            },
+            include: [
+                { association: 'inscripcion_empleado', attributes: { exclude: ['updatedAt'] } },
+                {
+                    association: 'incripcion_capacitacion', attributes: { exclude: ['updatedAt'] },
+                    include: [
+                        { association: 'capacitacion_curso', attributes: { exclude: ['updatedAt'] } }
+                    ]
+                },
+            ]
+        };
+        let datosEvent = await Inscripcion.findAll(optionsDb3);
+        dataPdf.push({ text: 'DATOS DEL EVENTO DE LA CAPACITACION', style: 'subheader', fontSize: 14, bold: true, });
+        var table3 = {
+            style: 'tableExample',
+            table: {
+                //headerRows: 1,
+                widths: [184, 75, 75, 75, 75],
+                body: [
+                    [{ text: 'FECHA DE REALIZACIÓN', bold: true }, { text: 'DESDE', bold: true }, b[0].incripcion_capacitacion.fecha_inicio, { text: 'HASTA', bold: true }, b[0].incripcion_capacitacion.fecha_fin],
+                    [{ text: 'HORARIO DE REALIZACIÓN', bold: true }, { text: 'DE HORAS', bold: true }, b[0].incripcion_capacitacion.horario_inicio, { text: 'A HORAS', bold: true }, b[0].incripcion_capacitacion.horario_fin],
+                    [{ text: 'NOMBRE DEL EVENTO', bold: true }, { text: b[0].incripcion_capacitacion.capacitacion_curso.nombre, style: 'text', colSpan: 4, alignment: 'center' }],
+                ]
+            }
+        };
+        dataPdf.push(table3);
+
+
+
+
+
+        const optionsDb4 = {
+            order: [['id', 'ASC']],
+            include: [
+                {
+                    association: 'tipo_criterio', attributes: { exclude: ['updatedAt'] },
+                    include: [{
+                        association: 'criterio_resap', attributes: { exclude: ['updateAt'] },
+                        include: [{
+                            association: 'inscripcion_resap', attributes: { exclude: ['updateAt'] },
+                            where: { [Op.and]: [{ uuid },] },
+                        }]
+                    }]
+                },
+            ]
+        };
+        let tipoEva = await TipoEvaluacion.findAll(optionsDb2);
+        tipoEva.forEach(resp => {
+            dataPdf.push({ text: ' ' });
+            dataPdf.push({ text: resp.nombre, style: 'subheader', fontSize: 14, bold: true, });
+            var table4 = {
+                //layout: 'lightHorizontalLines', // optional
+                style: 'tableExample',
+                table: {
+                    headerRows: 2,
+                    widths: [264, 55, 55, 55, 55],
+
+                    body: [
+                        [{ text: 'CRITERIO DE EVALUACIÓN', bold: true, rowSpan: 2, alignment: 'center' }, { text: 'PARAMETROS', bold: true, colSpan: 4, alignment: 'center' }, {}, {}, {}],
+                        [{}, { text: 'MUY BUENO', bold: true, style: 'criterioEva', alignment: 'center' }, { text: 'BUENO', bold: true, style: 'criterioEva', alignment: 'center' }, { text: 'ACEPTABLE', bold: true, style: 'criterioEva', alignment: 'center' }, { text: 'DEFICIENTE', bold: true, style: 'criterioEva', alignment: 'center' }]
+                    ]
+                }
+            };
+            resp.tipo_criterio.forEach(resp2 => {
+                const rowTable = [{ text: resp2.nombre, bold: true, style: 'fechaDoc', alignment: 'left' }, { text: resp2.criterio_resap[0].estado == 'MUY BUENO' ? 'X' : '', style: 'marcacionEva' }, { text: resp2.criterio_resap[0].estado == 'BUENO' ? 'X' : '', style: 'marcacionEva' }, { text: resp2.criterio_resap[0].estado == 'ACEPTABLE' ? 'X' : '', style: 'marcacionEva' }, { text: resp2.criterio_resap[0].estado == 'DEFICIENTE' ? 'X' : '', style: 'marcacionEva' }];
+                table4.table.body.push(rowTable);
+            })
+
+            dataPdf.push(table4);
+        });
+
+
+
+        dataPdf.push({ text: ' ' });
+        dataPdf.push({ text: 'OTROS COMENTARIOS Y RECOMENDACIONES DEL JEFE INMEDIATO SUPERIOR ', fontSize: 14, bold: true, });
+        var table5 = {
+            style: 'tableExample',
+            table: {
+                headerRows: 2,
+                widths: [220],
+
+                body: [
+                    [{ text: 'COMENTARIOS Y RECOMENDACIONES', bold: true, alignment: 'center' }, { text: 'Firma y sello Jefe Inmediato Superior ', bold: true, alignment: 'center' }],
+                    [{}, {}],
+                ]
+            }
+        };
+        // dataPdf.push({ text: ' ' });
+        // dataPdf.push({ text: 'COMENTARIOS Y RECOMENDACIONES', fontSize: 14, bold: true, });
+
+        dataPdf.push(table5);
+
+
+
+        let docDefinition = {
+            content: dataPdf,
+            footer: function (currentPage, pageCount) {
+                return [
+                    {
+                        text: currentPage.toString() + ' de ' + pageCount,
+                        alignment: 'right', margin: [0, 20, 20, 0],
+                    }
+                ]
+            },
+            styles: styles,
+            pageSize: 'LETTER',
+            pageOrientation: 'portrait',
+        };
+
+        const printer = new PdfPrinter(fonts);
+        let pdfDoc = printer.createPdfKitDocument(docDefinition);
+        let chunks = [];
+        pdfDoc.on("data", (chunk) => { chunks.push(chunk); });
+        pdfDoc.on("end", () => {
+            const result = Buffer.concat(chunks);
+            res.setHeader('Content-Type', 'application/pdf;');
+            res.setHeader('Content-disposition', `filename=report_assignments_${new Date().toJSON().split('T')[0]}.pdf`);
+            return res.send(result);
+        });
+        pdfDoc.end();
+    }
+
+    catch (error) {
+        const pathImage = path.join(__dirname, `../../uploads/none-img.jpg`);
+        return res.sendFile(pathImage);
+    }
+}
+
+
+const generatePdfResap33 = async (req = request, res = response) => {
     try {
         const { status, activo, uuid } = req.query;
         const optionsDb1 = {
@@ -255,33 +465,204 @@ const generatePdfResap37 = async (req = request, res = response) => {
                     { uuid },
                 ],
             },
-
             include: [
-                { association: 'prueba1', attributes: { exclude: ['updatedAt'] } },
-                {
-                    association: 'prueba2', attributes: { exclude: ['updatedAt'] },
-                    include: [
-                        { association: 'prueba3', attributes: { exclude: ['updatedAt'] } }
-                    ]
-                },
+                { association: 'ponerLosCriterios', attributes: { exclude: ['updatedAt'] } },
+
             ]
         };
-
         let inscReport = await Inscripcion.findAll(optionsDb1);
-        let dataPDF = dataPDFresap37(inscReport, req.userAuth); //PDF         
+        let dataPdf = dataPDFresap33(inscReport, req.userAuth); //PDF         
         let a = JSON.stringify(inscReport);
         let b = JSON.parse(a);
 
-        dataPDF.push({ text: 'DATOS DEL EVENTO', style: 'subheader', fontSize: 14, bold: true, });
+
+        dataPdf.push({
+            text: 'DATOS GENERALES DEL SERVIDOR PÚBLICO Y/O TRABAJADOR MUNICIPAL',
+            style: 'subheader', fontSize: 14, bold: true,
+        });
         var table1 = {
-            stryle: 'tableExample',
+            style: 'tableExample',
             table: {
-                
+                widths: [184, 245, 55],
+
+                body: [
+                    [{ text: 'NOMBRES Y APELLIDOS', bold: true, alignment: 'center' }, {}],
+                    [{ text: 'PUESTO (CARGO)', bold: true, alignment: 'center' }, {}, { text: 'ITEM:', bold: true, colSpan: 1 }],
+                    [{ text: 'SECRETARIA', bold: true, alignment: 'center' }, {}],
+                    [{ text: 'DIRECCION/COMUNA', bold: true, alignment: 'center' }, {}],
+                    [{ text: 'DEPARTAMENTO', bold: true, alignment: 'center' }, {}],
+                ]
             }
         };
-    }
-    catch {
+        dataPdf.push(table1);
 
+
+        const optionsDb2 = {
+            order: [['id', 'ASC']],
+            include: [{
+                association: 'ponerLosCriterios', attributes: { exclude: [] },
+            }]
+        };
+        let TipoEvalu1 = await TipoEvaluacion.findAll(optionsDb2);
+        TipoEvalu1.forEach(resp => {
+            dataPdf.push({ text: ' ' });
+            dataPdf.push({
+                text: '1. Conocimientos que exige el cargo (puesto), de acuerdo a manual de Funciones.',
+                style: 'subheader', fontSize: 12, bold: true,
+            });
+
+            var table2 = {
+                style: 'tableExample',
+                table: {
+                    widths: [484],
+
+                    body: [
+                        [{ text: '', bold: true }],
+                    ]
+                }
+            };
+            dataPdf.push(table2);
+        });
+
+
+
+        const optionsDb3 = {
+            order: [['id', 'ASC']],
+            include: [{
+                association: 'ponerLosCriterios', attributes: { exclude: [] },
+
+            }]
+        };
+        let TipoEvalu2 = await TipoEvaluacion.findAll(optionsDb3);
+        TipoEvalu2.forEach(resp => {
+            dataPdf.push({ text: ' ' });
+            dataPdf.push({
+                text: '2. Que conocimientos se requiere ampliar o conocer el trabajador y/o servidor Público, para poder desempeñar óptimamente sus funciones ',
+                style: 'subheader', fontSize: 12, bold: true,
+            });
+
+            var table3 = {
+                style: 'tableExample',
+                table: {
+                    widths: [484],
+
+                    body: [
+                        [{ text: '', bold: true }],
+                    ]
+                }
+            };
+            dataPdf.push(table3);
+        });
+
+
+
+        const optionsDb4 = {
+            order: [['id', 'ASC']],
+            include: [{
+                association: 'ponerLosCriterios', attributes: { exclude: [] },
+
+            }]
+        };
+        let TipoEvalu3 = await TipoEvaluacion.findAll(optionsDb4);
+        TipoEvalu3.forEach(resp => {
+            dataPdf.push({ text: ' ' });
+            dataPdf.push({
+                text: '3. Las funciones realizadas, a su criterio, qué conocimientos demandan por el trabajador y/o Servidor Público Municipal. La prioridad Podría ser alta, media o baja. ',
+                style: 'subheader', fontSize: 12, bold: true,
+            });
+
+            var table4 = {
+                style: 'tableExample',
+                table: {
+                    headerRows: 5,
+                    widths: [164, 185, 45, 45, 45],
+
+                    body: [
+                        [{ text: 'FUNCIONES', bold: true, alignment: 'center' }, { text: 'CONOCIMIENTOS DEMANDADOS', bold: true, alignment: 'center' }, { text: 'PRIORIDAD ALTA', bold: true, alignment: 'center' }, { text: 'PRIORIDA MEDIA', bould: true, alignment: 'center' }, { text: 'PRIORIDA BAJA', bould: true, alignment: 'center' }],
+                        [{}, {}, {}, {}, {}]
+                    ]
+                }
+            };
+            dataPdf.push(table4);
+        });
+
+
+
+        const optionsDb5 = {
+            order: [['id', 'ASC']],
+            include: [{
+                association: 'ponerLosCriterios', attributes: { exclude: [] },
+            }]
+        };
+        let TipoEvalu4 = await TipoEvaluacion.findAll(optionsDb5);
+        TipoEvalu4.forEach(resp => {
+            dataPdf.push({ text: ' ' });
+            dataPdf.push({
+                text: '  4. Mencione las materias en las que el Trabajador y/o Servidor Público Municipal tiene conocimientos profundos y podria actuar como capacitador. ',
+                style: 'subheader', fontSize: 12, bold: true,
+            });
+
+            var table5 = {
+                style: 'tableExample',
+                table: {
+                    widths: [42, 200, 200, 42],
+
+                    body: [
+                        [{}]
+                    ]
+                }
+            };
+            dataPdf.push(table5);
+        });
+
+
+        dataPdf.push({ text: ' ' });
+        var table6 = {
+            style: 'tableExample',
+            table: {
+                headerRows: 2,
+                widths: [340],
+
+                body: [
+                    [{}, {}],
+                    [{ text: 'Firma de conformidad Trabajador y/o Servidor Público municipal ', bold: true, alignment: 'center' }, { text: 'Firma y sello Jefe Inmediato Superior ', bold: true, alignment: 'center' }],
+                ]
+            }
+        };
+        dataPdf.push(table6);
+
+
+        let docDefinition = {
+            content: dataPdf,
+            footer: function (currentPage, pageCount) {
+                return [
+                    {
+                        text: currentPage.toString() + ' de ' + pageCount,
+                        alignment: 'right', margin: [0, 20, 20, 0],
+                    }
+                ]
+            },
+            styles: styles,
+            pageSize: 'LETTER',
+            pageOrientation: 'portrait',
+        };
+
+        const printer = new PdfPrinter(fonts);
+        let pdfDoc = printer.createPdfKitDocument(docDefinition);
+        let chunks = [];
+        pdfDoc.on("data", (chunk) => { chunks.push(chunk); });
+        pdfDoc.on("end", () => {
+            const result = Buffer.concat(chunks);
+            res.setHeader('Content-Type', 'application/pdf;');
+            res.setHeader('Content-disposition', `filename=report_assignments_${new Date().toJSON().split('T')[0]}.pdf`);
+            return res.send(result);
+        });
+        pdfDoc.end();
+
+    }
+    catch (error) {
+        const pathImage = path.join(__dirname, `../../uploads/none-img.jpg`);
+        return res.sendFile(pathImage);
     }
 }
 
@@ -375,12 +756,6 @@ const getInfoCapacitacion = async (uuid) => {
     }
 }
 // ---------------------------------
-// const generatePdfResap37 = async (req = request, res = response) => {
-
-//     const filePath = path.join(__dirname, '../../uploads/resap37.pdf');
-//     res.download(filePath, 'resap37.pdf');      
-// }
-
 
 
 
@@ -470,17 +845,15 @@ const generarCertificado = async (req = request, res = response) => {
         return res.send(result);
     });
     pdfDoc.end();
-
-
-
 }
 
 
 
 module.exports = {
     generatePdfReportResap,
-    inscritosCapacitacion,
     generatePdfResap37,
+    generatePdfResap33,
+    inscritosCapacitacion,
     generarCertificado
 
 };
