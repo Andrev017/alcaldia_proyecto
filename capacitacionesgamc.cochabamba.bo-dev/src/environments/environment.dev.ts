@@ -14,10 +14,6 @@ export const environment = {
     criterioeva: host+'/api/v1/criterioevaluacion',
     tipoeva: host+'/api/v1/tipoevaluacion',
     resap: host+'/api/v1/resap',
-
-    resap37: host+'/api/v1/resap37',
-    resap33: host+'/api/v1/resap33 ',
-
     reporte: host+'/api/v1/reporte',
     archives : '',
     thirds: host+'/thirds',

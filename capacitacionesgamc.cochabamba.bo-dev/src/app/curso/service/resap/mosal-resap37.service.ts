@@ -3,7 +3,11 @@ import { Subject, Observable, AsyncSubject } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { map, tap, catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { CurResponse, Curso, Cursos } from '../../api/curso.model';
+import {
+    Resap37,
+    Resap37Request,
+    Resap37Response,
+} from '../../api/resap37.model';
 
 @Injectable({
     providedIn: 'root',
@@ -13,7 +17,7 @@ export class MosalResap37Service {
     visibilityChange = this.visibilitySubject.asObservable();
 
     // ------------------------------PARTE DEL MODAL -----------------------------------
-    show() {
+    abrir() {
         this.visibilitySubject.next(true);
     }
 
@@ -22,68 +26,61 @@ export class MosalResap37Service {
     }
 
     // --------------------------------- CONSUMIR LAS ApI REST ------------------------------------
-    /*
     private apiUrl: string;
-    private _refreshrequired = new Subject<void>();
-    // public saving: EventEmitter<boolean> = new EventEmitter<boolean>();
+    public saving: EventEmitter<boolean> = new EventEmitter<boolean>();
 
     constructor(private http: HttpClient) {
-        this.apiUrl = `${environment.apiUrls.resap37s}`;
+        this.apiUrl = `${environment.apiUrls.resap37}`;
     }
 
-    get RequiredRefresh() {
-        return this._refreshrequired;
+    getResap37AllParameter(params: any): Observable<Resap37[]> {
+        return this.http
+            .get<Resap37Response>(`${this.apiUrl}`, { params: params })
+            .pipe(
+                map((response) => {
+                    return response.resap37.data;
+                }),
+                catchError((err, caught) => {
+                    console.error(err);
+                    throw err;
+                })
+            );
     }
 
-    // toggleActivoResap(id: number): Observable<any> {
-    //     return this.http.put(`${this.apiUrl}/toggleActivo/${id}`, {});
+    getResap37Parameter(params: any): Observable<Resap37> {
+        return this.http
+            .get<Resap37Response>(`${this.apiUrl}`, { params: params })
+            .pipe(
+                map((response) => {
+                    return response.resap37.data[0];
+                }),
+                catchError((err, caught) => {
+                    console.error(err);
+                    throw err;
+                })
+            );
+    }
+
+    // saveResap37(inputdata: any){
+    //     const headers = new HttpHeaders(environment.httpHeaders);
+    //     return this.http.post<Resap37Response>(`${this.apiUrl}`, inputdata, {
+    //         headers,
+    //     });
     // }
+    // import { Resap37Request } from './interfaces'; // Ajusta la ruta de importación
 
-    getResapParameter(params: any) {
-        return this.http
-            .get<any>(`${this.apiUrl}`, { params: params })
-            .toPromise()
-            .then((res) => res.resap37s.data as Reasap37[])
-            .then((data) => data);
-    }
-    getSearchsAllParameter(params: any) {
-        return this.http
-            .get<any>(`${this.apiUrl + '/Search'}`, { params: params })
-            .toPromise()
-            .then((res) => <any[]>res.resap37s)
-            .then((data) => {
-                return data;
-            });
-    }*/
-    //getResap37Parameter(params: any): Observable</*Resap37*/> {
-    /*return this.http
-
-        .get<ResapResponse>(`${this.apiUrl}`, { params: params })
-        .pipe(
-            map((response) => {
-                //console.log(response);
-                return response.cursos.data[0];
-            }),
-            catchError((err, caught) => {
-                console.error(err);
-                throw err;
-            })
-        );
-    }
-
-    saveResap(inputdata: any) {
-        const headers = new HttpHeaders(environment.httpHeaders);
-        return this.http.post<ResapResponse>(`${this.apiUrl}`, inputdata, {
-            headers,
+    saveResap37(payload: Resap37Request,tokenUSER:string): Observable<any> {
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${tokenUSER}`,
         });
+        return this.http.post<any>(`${this.apiUrl}`, payload, { headers });
     }
 
-    updatResap(inputdata: any, uuid: string) {
+    updateResap37(inputdata: any, uuid: string) {
         const headers = new HttpHeaders(environment.httpHeaders);
-        return this.http.put<ResapResponse>(
+        return this.http.put<Resap37Response>(
             `${this.apiUrl + '/' + uuid}`,
-            inputdata,
-            { headers }
+            inputdata
         );
-    }*/
+    }
 }

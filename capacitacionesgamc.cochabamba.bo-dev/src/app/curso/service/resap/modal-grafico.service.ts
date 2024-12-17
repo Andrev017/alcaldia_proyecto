@@ -15,4 +15,11 @@ export class ModalGraficoService {
     hide() {
         this.visibilitySubject.next(false);
     }
+
+
+
+// ------------------- Parte de las APIs --------------
+
 }
+
+

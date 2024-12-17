@@ -2,7 +2,9 @@ import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { Table } from 'primeng/table';
 import { HabilitarResap33Service } from 'src/app/curso/service/resap/habilitar-resap33.service';
 import { ModalGraficoService } from 'src/app/curso/service/resap/modal-grafico.service';
-import { SortEvent } from 'primeng/api';
+import { ModalResap33Service } from 'src/app/curso/service/resap/modal-resap33.service';
+import { AuthService } from 'src/app/curso/service/auth/auth.service';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-solicitudes-llenadas',
@@ -12,25 +14,38 @@ import { SortEvent } from 'primeng/api';
 export class SolicitudesLlenadasComponent implements OnInit {
     isChecked: boolean = false;
     isToggleEnabled = false;
-    loading: boolean = false; //CAMBIAR A TRUE Y VERIFICAR SI FUNCIONA
-
-    stateOptions = [
-        { name: 'Operativo', code: '' },
-        { name: 'Administrativo', code: '' },
-    ];
+    public resap33get: any;
+    public solicutuDelate: any;
+    public auth: any;
+    private userSubscription: Subscription;
+    llenadoSolid1 = [];
 
     @ViewChild('filter') filter!: ElementRef;
 
     constructor(
         private toggleService: HabilitarResap33Service,
-        private modal_grafico: ModalGraficoService
-    ) {}
+        private modal_grafico: ModalGraficoService,
+        private serviceResap33: ModalResap33Service,
+        private authService: AuthService
+    ) {
+        this.userSubscription = this.authService.getUser().subscribe((auth) => {
+            this.auth = auth;
+        });
 
-    onGlobalFilter(table: Table, event: Event) {
-        table.filterGlobal(
-            (event.target as HTMLInputElement).value,
-            'contains'
-        );
+        this.userSubscription = this.serviceResap33
+            .getResap33AllParameter()
+            .subscribe((sect) => {
+                this.resap33get = sect;
+            });
+
+        // this.serviceResap33.getResap33AllParameter().subscribe({
+        //     next: (resp) => {
+        //         this.resap33get = resp;
+        //     },
+        //     error: (e) => {
+        //         console.log('error: ', e);
+        //     },
+        // });
     }
 
     ngOnInit() {
@@ -39,8 +54,16 @@ export class SolicitudesLlenadasComponent implements OnInit {
         });
     }
 
+    // --------------------- PARTE DEL MODAL Y TABLA ------------------
     onToggleChange(event: any) {
         this.toggleService.setToggleState(event.checked);
+    }
+
+    onGlobalFilter(table: Table, event: Event) {
+        table.filterGlobal(
+            (event.target as HTMLInputElement).value,
+            'contains'
+        );
     }
 
     abrirModalGrafico() {
@@ -51,7 +74,7 @@ export class SolicitudesLlenadasComponent implements OnInit {
     clear(table: Table) {
         table.clear();
         this.filter.nativeElement.value = '';
-    }
+    } //-------------------------------------------
 
     llenadoSolid = [
         {

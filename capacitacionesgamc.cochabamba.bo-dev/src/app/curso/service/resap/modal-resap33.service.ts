@@ -4,16 +4,14 @@ import { Resap33Component } from '../../components/pages/module1/resap/resap33/r
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { map, tap, catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { ThisReceiver } from '@angular/compiler';
-// import { CurResponse, Curso, Cursos } from '../../api/curso.model';  CAMBAIR POr La TABLA
-
+import { Resap33, Resap33Response } from '../../api/resap33.model';
 
 @Injectable({
     providedIn: 'root',
 })
 export class ModalResap33Service {
-    private malo = Resap33Component;
     private visibilitySubject = new Subject<boolean>();
+    
 
     visibilityChange = this.visibilitySubject.asObservable();
 
@@ -28,21 +26,54 @@ export class ModalResap33Service {
     // --------------------------------- CONSUMIR LAS ApI REST ------------------------------------
 
     private apiUrl: string;
-    private _refreshrequired = new Subject<void>();
     public saving: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-    constructor( private http: HttpClient){
-        // this.apiUrl = `${environment.apiUrls.resap33s}`;
-        this.apiUrl = '';
+    constructor(private http: HttpClient) {
+        this.apiUrl = `${environment.apiUrls.resap33}`;
     }
 
-    get RequiredRefresh(){
-        return this._refreshrequired;
+    getResap33AllParameter(): Observable<Resap33[]> {
+        return this.http.get<Resap33Response>(`${this.apiUrl}`).pipe(
+            map((response) => {
+                console.log(response);
+
+                return response.resap33.data;
+            }),
+            catchError((err, caught) => {
+                console.error(err);
+                throw err;
+            })
+        );
     }
 
-    toggleActivoResap(id: number): Observable<any>{
-        return this.http.put(`${this.apiUrl}/toggleActivo/${id}`, {});
+    getResap33Parameter(params: any): Observable<Resap33> {
+        return this.http
+            .get<Resap33Response>(`${this.apiUrl}`, { params: params })
+            .pipe(
+                map((response) => {
+                    return response.resap33.data[0];
+                }),
+                catchError((err, caught) => {
+                    console.error(err);
+                    throw err;
+                })
+            );
     }
 
+    saveResap33(inputdata: any) {
+        const headers = new HttpHeaders(environment.httpHeaders);
+        return this.http.post<Resap33Response>(`${this.apiUrl}`, inputdata, {
+            headers,
+        });
+    }
 
+    updateResap33(inputdata: any, uuid: string) {
+        const headers = new HttpHeaders(environment.httpHeaders);
+        return this.http.put<Resap33Response>(
+            `${this.apiUrl + '/' + uuid}`,
+            inputdata
+        );
+    }
+
+    //----------------- PARTE DE LOS GRAFICOS -------------------
 }

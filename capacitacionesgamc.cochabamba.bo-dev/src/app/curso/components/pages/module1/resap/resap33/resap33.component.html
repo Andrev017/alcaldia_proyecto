@@ -18,10 +18,8 @@
 
             <!-- ----------------------- PARTE DE LA TABLA ---------------------------  -->
             <h5>Registros Realizados por Gestión</h5>
-            <p-table #dt1 [value]="llenadoReg" [rows]="10" [loading]="loading" [paginator]="true"
-                responsiveLayout="scroll" [rowHover]="true" styleClass="p-datatable-gridlines"
-                [globalFilterFields]="['registro', 'gestion']">
-
+            <p-table #dt1 [value]="prueba" [rows]="10" [rowHover]="true" styleClass="p-datatable-gridlines"
+                [paginator]="true" [globalFilterFields]="['registro', 'gestion']" responsiveLayout="scroll">
 
                 <ng-template pTemplate="caption">
                     <div class="flex justify-content-between flex-column sm:flex-row">
@@ -62,20 +60,22 @@
                     </tr>
                 </ng-template>
 
-                <ng-template pTemplate="body" let-llenados>
+                <ng-template pTemplate="body" let-prueba>
                     <tr>
                         <td>
-                            {{llenados.registro}}
+                            {{ auth?.emp.nombre +' '+ auth?.emp.otro_nombre +' '+
+                            auth?.emp.paterno + ' ' +auth?.emp.materno }}
                         </td>
+                    
                         <td>
-                            {{llenados.gestion}}
+                            {{resap33get.secretaria}} 
                         </td>
                         <td class="text-center">
-                            <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-success m-1"
-                                title="Ver" (click)="verRegistro()"></button>
+                            <!-- <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-success m-1"
+                                title="Ver" (click)="verRegistro()"></button> -->
 
-                            <button pButton icon="pi pi-file-pdf" class="p-button-rounded p-button m-1" title="PDF"
-                                (click)="generarPDF()"></button>
+                            <button pButton icon="pi pi-file-pdf" class="p-button-rounded p-button m-1"
+                                title="Descargar PDF" (click)="generarPDF()"></button>
                         </td>
                     </tr>
                 </ng-template>
@@ -83,17 +83,20 @@
 
                 <ng-template pTemplate="emptymessage">
                     <tr>
-                        <td colspan="8">No customers found.</td>
+                        <td colspan="8">No se encontraron Datos.</td>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="loadingbody">
                     <tr>
-                        <td colspan="8">Loading customers data. Please wait.</td>
+                        <td colspan="8">Cargando los datos.</td>
                     </tr>
                 </ng-template>
 
 
             </p-table>
+
+
+
         </div>
     </div>
 </div>

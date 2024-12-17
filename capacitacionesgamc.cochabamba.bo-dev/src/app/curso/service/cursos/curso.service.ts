@@ -12,6 +12,7 @@ export class CursoService {
     private apiUrl: string;
     public saving: EventEmitter<boolean> = new EventEmitter<boolean>();
 
+    
     constructor(private http: HttpClient) {
         this.apiUrl = `${environment.apiUrls.cursos}`;
     }

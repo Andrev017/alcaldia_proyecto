@@ -33,15 +33,10 @@ export class CursosListComponent {
     // products: Product[] = [];
 
     rowGroupMetadata: any;
-
     expandedRows: expandedRows = {};
-
     activityValues: number[] = [0, 100];
-
     isExpanded: boolean = false;
-
     idFrozen: boolean = false;
-
     loading: boolean = true;
 
     cursoDialog: boolean = false;

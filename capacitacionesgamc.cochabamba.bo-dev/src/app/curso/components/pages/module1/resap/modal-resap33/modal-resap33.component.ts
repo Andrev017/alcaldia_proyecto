@@ -4,8 +4,13 @@ import { Subscription } from 'rxjs';
 import { ModalResap33Service } from 'src/app/curso/service/resap/modal-resap33.service';
 // import { ApiService } from './api.service';
 // import { response } from 'express';
-import { FormBuilder } from '@angular/forms';
-import { FuncionarioComponent } from '../../funcionario/funcionario.component';
+// import { FormBuilder } from '@angular/forms';
+// import { FuncionarioComponent } from '../../funcionario/funcionario.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import Swal from 'sweetalert2';
+import { CursoService } from 'src/app/curso/service/cursos/curso.service';
+import { Curso } from 'src/app/curso/api/curso.model';
 
 @Component({
     selector: 'app-modal-resap33',
@@ -16,6 +21,9 @@ export class ModalResap33Component implements OnInit {
     fechaActual: Date;
     displayModal: boolean = false;
     inicioEnumeracion = 1;
+
+    inputSecretaria: string = '';
+    inputDireccion: string = '';
 
     datosExtraidos: any; //varible del servicio
 
@@ -36,35 +44,33 @@ export class ModalResap33Component implements OnInit {
 
     indexEdicion: number | null = null;
     indexEdicion3: number | null = null;
+    indexEdicion4: number | null = null;
+
+    //-----------------------------------------------------------------------
 
     public auth: any;
     private userSubscription: Subscription;
+    public cursos: Curso[] = [];
+    selectedCurso: any = null;
 
     //-------------------------------- Combo Box ----------------------------------------
 
     listSector: any;
-    listPrioridad: any;
     listConocim: any;
 
     sector = [
         { name: 'SECTOR OPERATIVO', code: '' },
         { name: 'SECTOR ADMINISTRATIVO', code: '' },
     ];
+    onSectorChange(value: any): void {
+        console.log('Sector seleccionado:', value);
 
-    // prioridad = [
-    //     { name: 'Alta', code: 'al' },
-    //     { name: 'Medio', code: 'me' },
-    //     { name: 'Bajo', code: 'ba' },
-    // ];
-
-    conocimiento_data = [
-        { name: 'Curso 1', code: 'c1' },
-        { name: 'Curso 2', code: 'c2' },
-        { name: 'Curso 3', code: 'c3' },
-        { name: 'Curso 4', code: 'c4' },
-        { name: 'Curso 5', code: 'c5' },
-        { name: 'Curso 6', code: 'c6' },
-    ];
+        if (value) {
+            const inputData = {
+                selectedSector: value,
+            };
+        }
+    }
 
     //-----------------------------------------------------------------------------------------------------
 
@@ -72,7 +78,8 @@ export class ModalResap33Component implements OnInit {
         private authService: AuthService,
         private modal_resap33: ModalResap33Service,
         // private apiservice: ApiService,
-        private fb: FormBuilder //pregunta3
+        private fb: FormBuilder, //pregunta3
+        private cursoservice: CursoService
     ) {
         this.fechaActual = new Date();
         this.userSubscription = this.authService.getUser().subscribe((auth) => {
@@ -93,9 +100,25 @@ export class ModalResap33Component implements OnInit {
         setInterval(() => {
             this.fechaActual = new Date();
         }, 1000);
+
+        this.GetAll();
+        this.GetPregumta4();
+
+        myForm: FormGroup;
+
+        // this.myForm = this.fb.group({
+        //     name: [''], // Input
+        //     sector: [''], // Select
+        // });
     }
 
-    //--------------------------------------------Servicio-----------------------------------------
+    onInput1Change(value: string): void {
+        this.inputSecretaria = value;
+    }
+
+    onInput2Change(value: string): void {
+        this.inputDireccion = value;
+    }
 
     // datosService() {
     //     const datos = { nombre_completo: 'lujan' };
@@ -140,13 +163,23 @@ export class ModalResap33Component implements OnInit {
     // }
 
     //----------------------------------PARTE DEL MODAL--------------------------------
+
     cerrarModal() {
         this.displayModal = false;
     }
 
     guardar() {
-        alert('Formulario Guardado');
+        this.createTraing();
+    }
+
+    createTraing() {
         this.cerrarModal();
+        Swal.fire({
+            title: 'Éxito',
+            text: 'El registro de RESAP se ha registrado correctamente',
+            icon: 'success',
+            showClass: { popup: 'animated animate fadeInDown' },
+        });
     }
 
     // ----------------------------------- Pregunta 1----------------------------------------------
@@ -162,53 +195,58 @@ export class ModalResap33Component implements OnInit {
 
     // ------------------------------------------pregunta 2-------------------------------------------
 
+    GetAll() {
+        const params = {}; // ParámetROS DEL BACK
+        this.cursoservice.getCursosAllParameter(params).then((customers) => {
+            this.cursos = customers;
+        });
+    }
+
     agregarPregunta2() {
-        if (this.nuevoConocimiento2.trim()) {
-            this.tabla2.push(this.nuevoConocimiento2);
-            this.nuevoConocimiento2 = '';
-        } else if (this.listConocim) {
-            this.tabla2.push(this.listConocim.name);
-            this.listConocim = null;
+        const nuevoConocimiento =
+            this.nuevoConocimiento2.trim() || this.selectedCurso;
+        if (nuevoConocimiento) {
+            this.tabla2.push(nuevoConocimiento);
+            this.resetFormulario();
         }
     }
 
     agregadoHabiltado2() {
         return (
-            this.nuevoConocimiento2.trim() !== '' || this.listConocim !== null
+            this.nuevoConocimiento2.trim() !== '' || this.selectedCurso !== null
         );
     }
 
-    cambioDropdown() {
-        if (this.listConocim) {
-            this.nuevoConocimiento2 = '';
-        }
-    }
-
-    cambioEtrada() {
-        if (this.nuevoConocimiento2.trim()) {
-            this.listConocim = null;
-        }
-    }
-
-    eliminarPregunta2(conocimiento: string) {
-        this.tabla2 = this.tabla2.filter((c) => c !== conocimiento);
-    }
-
-    editarPregunta2(conocimiento: string, index: number) {
-        this.nuevoConocimiento2 = conocimiento;
+    editarPregunta2(conocimiento: any, index: number) {
+        this.nuevoConocimiento2 = conocimiento.nombre || conocimiento;
         this.editando2 = true;
         this.indexEdicion = index;
     }
 
     guardarEdicionPregunta2() {
         if (this.indexEdicion !== null) {
-            this.tabla2[this.indexEdicion] = this.nuevoConocimiento2;
-            this.cancelarEdicionPregunta2();
+            this.tabla2[this.indexEdicion] = this.nuevoConocimiento2.trim();
+            this.resetFormulario();
         }
     }
 
-    cancelarEdicionPregunta2() {
+    eliminarPregunta2(index: number) {
+        this.tabla2.splice(index, 1);
+    }
+
+    cambioDropdown() {
+        console.log('Curso seleccionado:', this.selectedCurso);
+    }
+
+    cambioEtrada() {
+        if (this.nuevoConocimiento2.trim()) {
+            this.selectedCurso = null;
+        }
+    }
+
+    resetFormulario() {
         this.nuevoConocimiento2 = '';
+        this.selectedCurso = null;
         this.editando2 = false;
         this.indexEdicion = null;
     }
@@ -260,56 +298,63 @@ export class ModalResap33Component implements OnInit {
         this.indexEdicion3 = null;
     }
     // ----------------------------------- Pregunta 4 --------------------------------------------------
+    //---------------- Parte del backend -----------------------------
+    public cursos4: Curso[] = [];
+    selectedCurso4: any = null;
+
+    GetPregumta4() {
+        const params = {};
+        this.cursoservice.getCursosAllParameter(params).then((customers) => {
+            this.cursos4 = customers;
+        });
+    }
+    //-----------------------------------------------------------
     agregarPregunta4() {
-        if (this.nuevoConocimiento4.trim() !== '' || this.listConocim) {
-            const conocimiento =
-                this.nuevoConocimiento4.trim() || this.listConocim.name;
-            this.tabla4.push(conocimiento);
-            this.cancelarEdicionPregunta4();
+        const nuevoConocimient =
+            this.nuevoConocimiento4.trim() || this.selectedCurso4;
+        if (nuevoConocimient) {
+            this.tabla4.push(nuevoConocimient);
+            this.resetForm();
         }
     }
-
-    editarPregunta4(conocimiento: string, index: number) {
-        this.nuevoConocimiento4 = conocimiento;
-        this.editando4 = true;
-        this.indexEdicion = index;
-    }
-
-    guardarEdicionPregunta4() {
-        if (this.indexEdicion !== null) {
-            this.tabla4[this.indexEdicion] = this.nuevoConocimiento4;
-            this.cancelarEdicionPregunta4();
-        }
-    }
-
-    cancelarEdicionPregunta4() {
-        this.nuevoConocimiento4 = '';
-        this.listConocim = null;
-        this.editando4 = false;
-        this.indexEdicion = null;
-    }
-
-    eliminarPregunta4(conocimiento: string) {
-        this.tabla4 = this.tabla4.filter((c) => c !== conocimiento);
-    }
-
-    agregadoHabilitado4() {
+    agregadoHabiltado4(){
         return (
-            this.nuevoConocimiento4.trim() !== '' || this.listConocim !== null
+            this.nuevoConocimiento4.trim() != '' || this.selectedCurso4 != null
         );
     }
 
-    cambioDropdownPregunta4() {
-        // Detectar cambio en el dropdown
-        if (this.listConocim) {
-            this.nuevoConocimiento4 = '';
+    editarPregunta4(conocimient: any, index: number){
+        this.nuevoConocimiento4 = conocimient.nombre || conocimient;
+        this.editando4 = true;
+        this.indexEdicion4 = index;
+    }
+
+    guardarEdicionPregunta4() {
+        if (this.indexEdicion4 !== null) {
+            this.tabla4[this.indexEdicion4] = this.nuevoConocimiento4.trim();
+            this.resetForm();
         }
     }
 
-    cambioEtradaPregunta4() {
-        // Detectar cambio en el input de texto
-        if (this.nuevoConocimiento4.trim() !== '') {
-            this.listConocim = null;
+    eliminarPregunta4(index: number) {
+        this.tabla4.splice(index, 1);
+    }
+
+    cambioDropdown4() {
+        console.log('Curso seleccionado:', this.selectedCurso4);
+    }
+
+    cambioEtrada4() {
+        if (this.nuevoConocimiento4.trim()) {
+            this.selectedCurso4 = null;
         }
     }
+
+    resetForm(){
+        this.nuevoConocimiento4 = '';
+        this.selectedCurso4 = null;
+        this.editando4 = false;
+        this.indexEdicion4 = null;
+    }
+
 }

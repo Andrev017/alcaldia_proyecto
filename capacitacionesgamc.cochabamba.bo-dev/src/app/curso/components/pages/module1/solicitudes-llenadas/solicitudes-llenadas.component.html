@@ -9,7 +9,7 @@
 
                 <div class="flex justify-content-between flex-column sm:flex-row">
                     <div style="margin-top: 9px;">
-                        <h5 style="margin-right: 100px;">Estado de las Solicitudes de Capacitación</h5>
+                        <h5 style="margin-right: 100px;">Estado de las Solicitudes de Capacitación del Resap33</h5>
 
                     </div>
                     <!-- ------------------------------------------------------------------------- -->
@@ -25,9 +25,8 @@
             <h5>Solicitudes Llenadas </h5>
 
 
-            <p-table #dt1 [value]="llenadoSolid" [rows]="10" [loading]="loading" [rowHover]="true"
-                styleClass="p-datatable-gridlines" [paginator]="true"
-                [globalFilterFields]="['gestion','nombre','carnet']" responsiveLayout="scroll">
+            <p-table #dt1 [value]="llenadoSolid" [rows]="10" [rowHover]="true" styleClass="p-datatable-gridlines"
+                [paginator]="true" [globalFilterFields]="['gestion','nombre','carnet']" responsiveLayout="scroll">
 
                 <ng-template pTemplate="caption">
                     <div class="flex justify-content-between flex-column sm:flex-row">
@@ -38,8 +37,8 @@
                         <button pButton pRipple icon="pi pi-chart-bar" label="Generar Grafico"
                             class="p-button-success mb-2" (click)="abrirModalGrafico()"></button>
 
-                        <button pButton pRipple icon="pi pi-file-pdf" label="Generar pdf"
-                            class="p-button mb-2"></button>
+                        <!-- <button pButton pRipple icon="pi pi-file-pdf" label="Generar pdf"
+                            class="p-button mb-2"></button> -->
 
 
                         <span class="p-input-icon-left mb-2">
@@ -80,32 +79,33 @@
                             </div>
                         </th>
                     </tr>
-
                 </ng-template>
+
                 <ng-template pTemplate="body" let-llenadoSolid>
                     <tr>
                         <td>
                             {{llenadoSolid.gestion}}
                         </td>
                         <td>
-                            {{llenadoSolid.nombre}}
+                            {{ auth?.emp.nombre +' '+ auth?.emp.otro_nombre +' '+
+                            auth?.emp.paterno + ' ' +auth?.emp.materno }}
+                            <!-- {{llenadoSolid.nombre}} -->
                         </td>
                         <td>
-                            {{llenadoSolid.carnet}}
+                            {{ auth?.emp.ci }}
+                            <!-- {{llenadoSolid.carnet}} -->
                         </td>
                         <td class="text-center">
-                            <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success m-1"
-                                title="Editar"></button>
-
-                            <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger m-1"
-                                title="Eliminar"></button>
+                            <!-- <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success m-1"
+                                title="Editar"></button> -->
 
                             <button pButton pRipple icon="pi pi-file-pdf" title="Generar PDF"
                                 class="p-button-rounded p-button m-1" (click)="abrirModalGrafico()"></button>
 
+
                         </td>
                     </tr>
-
+                    <br>
                 </ng-template>
             </p-table><br>
 

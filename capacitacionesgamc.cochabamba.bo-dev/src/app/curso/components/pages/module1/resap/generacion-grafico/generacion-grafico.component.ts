@@ -2,7 +2,9 @@ import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { ModalGraficoService } from 'src/app/curso/service/resap/modal-grafico.service';
 import { Chart, registerables } from 'chart.js';
 import { Table } from 'primeng/table';
-import { SortEvent } from 'primeng/api';
+import { ModalResap33Service } from 'src/app/curso/service/resap/modal-resap33.service';
+import { AuthService } from 'src/app/curso/service/auth/auth.service';
+import { Subscription } from 'rxjs';
 
 Chart.register(...registerables);
 
@@ -14,14 +16,20 @@ Chart.register(...registerables);
 export class GeneracionGraficoComponent implements OnInit {
     public barChart: any;
     products: any;
-    loading: boolean = false;
+    isVisible: boolean = false;
+    public resap33get: any;
+    public auth: any; //AuthResponse ;
+    private userSubscription: Subscription;
 
-    isVisible: boolean = false; //-----------------PARTE DE MODAL----------------------------
 
     @ViewChild('filter') filter!: ElementRef;
 
-
-    constructor(private modal_grafico: ModalGraficoService) {
+    
+    constructor(
+        private modal_grafico: ModalGraficoService,
+        private serviceResap33: ModalResap33Service,
+        private authService: AuthService
+    ) {
         //----------------------------------PARTE DEL MODAL-----------------------
         this.modal_grafico.visibilityChange.subscribe((isVisible: boolean) => {
             this.isVisible = isVisible;
@@ -32,11 +40,24 @@ export class GeneracionGraficoComponent implements OnInit {
             if (this.isVisible) {
                 setTimeout(() => {
                     this.createChart();
-                }, 100); 
+                }, 100);
             } else if (this.barChart) {
-                this.barChart.destroy(); 
+                this.barChart.destroy();
             }
+        });
 
+        //-------------- BACKEND --------------
+        this.userSubscription = this.authService.getUser().subscribe((auth) => {
+            this.auth = auth;
+        });
+
+        this.serviceResap33.getResap33AllParameter().subscribe({
+            next: (resp) => {
+                this.resap33get = resp;
+            },
+            error: (e) => {
+                console.log('error: ', e);
+            },
         });
     }
 
@@ -60,11 +81,16 @@ export class GeneracionGraficoComponent implements OnInit {
             (event.target as HTMLInputElement).value,
             'contains'
         );
-    }
+    }//---------------------------------------------------
+
+
+
+
+
 
     createChart() {
         if (this.barChart) {
-            this.barChart.destroy(); 
+            this.barChart.destroy();
         }
 
         const cursos = [
@@ -152,29 +178,4 @@ export class GeneracionGraficoComponent implements OnInit {
         ];
     }
 
-    customSort(event: SortEvent) {
-        if (event.data && event.field) {
-            const order = event.order ?? 1;
-
-            event.data.sort((data1, data2) => {
-                let value1 = data1[event.field!];
-                let value2 = data2[event.field!];
-                let result = null;
-
-                if (value1 == null && value2 != null) result = -1;
-                else if (value1 != null && value2 == null) result = 1;
-                else if (value1 == null && value2 == null) result = 0;
-                else if (
-                    typeof value1 === 'string' &&
-                    typeof value2 === 'string'
-                ) {
-                    result = value1.localeCompare(value2);
-                } else {
-                    result = value1 < value2 ? -1 : value1 > value2 ? 1 : 0;
-                }
-
-                return order * result;
-            });
-        }
-    }
 }
