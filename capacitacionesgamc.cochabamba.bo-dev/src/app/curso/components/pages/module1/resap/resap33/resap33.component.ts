@@ -17,6 +17,7 @@ export class Resap33Component implements OnInit {
     public resap33get: any;
     public auth: any; 
     private userSubscription: Subscription;
+    
 
     @ViewChild('filter') filter!: ElementRef;
 
@@ -30,7 +31,7 @@ export class Resap33Component implements OnInit {
         //     nombre: ['', Validators.required],
         //     gestion: ['', Validators.required],
         // });
-
+        
         this.userSubscription = this.authService.getUser().subscribe((auth) => {
             this.auth = auth;
         });
@@ -49,6 +50,8 @@ export class Resap33Component implements OnInit {
         this.toggleService.toggleState$.subscribe((state) => {
             this.isToggleEnabled = state;
         });
+
+        
 
         //------------------- COMBINAR LOS DATOS PARA LA TABLA ----------------------
         // this.authService.getUser().subscribe(authData => {

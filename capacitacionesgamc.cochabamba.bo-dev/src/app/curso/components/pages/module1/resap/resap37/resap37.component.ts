@@ -86,7 +86,7 @@ export class Resap37Component {
             ],
         };
 
-        this.formData = {
+       this.formData ={
             criterio1: '',
             criterio2: '',
             criterio3: '',

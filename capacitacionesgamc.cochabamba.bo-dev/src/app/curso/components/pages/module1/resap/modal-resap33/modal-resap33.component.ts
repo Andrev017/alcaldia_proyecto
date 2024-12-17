@@ -41,6 +41,7 @@ export class ModalResap33Component implements OnInit {
     editando2: boolean = false;
     editando3: boolean = false;
     editando4: boolean = false;
+    idEmpleado: number = 0;
 
     indexEdicion: number | null = null;
     indexEdicion3: number | null = null;
@@ -57,11 +58,48 @@ export class ModalResap33Component implements OnInit {
 
     listSector: any;
     listConocim: any;
-
-    sector = [
-        { name: 'SECTOR OPERATIVO', code: '' },
-        { name: 'SECTOR ADMINISTRATIVO', code: '' },
+    sectorData: Array<{ sectores: string }> = [
+        { sectores: 'SECTOR OPERATIVO' },
+        { sectores: 'SECTOR ADMINISTRATIVO' },
     ];
+
+    formData: {
+        resap33: {
+            sector: string;
+            secretaria: string;
+            dirección: string;
+            gestion: number;
+        };
+        conExigido: Array<{ conocimientos: string }>;
+        conAmpliar: Array<{
+            conocimientos?: string;
+            id_curso: any|number;
+            es_otro: boolean;
+        }>;
+        funcionCon: Array<{
+            funciones: string;
+            conocimiento_demandado: string;
+            prioridad: string;
+        }>;
+        capMateria: Array<{ materias: string }>;
+    } = {
+        resap33: {
+            sector: '',
+            secretaria: '',
+            dirección: '',
+            gestion: new Date().getFullYear(),
+        },
+        conExigido: [{ conocimientos: '' }],
+        conAmpliar: [{ conocimientos: '', id_curso: '', es_otro: false }],
+        funcionCon: [
+            { funciones: '', conocimiento_demandado: '', prioridad: '' },
+        ],
+        capMateria: [{ materias: '' }],
+    };
+
+    onInputChange() {
+        console.log(this.formData);
+    }
     onSectorChange(value: any): void {
         console.log('Sector seleccionado:', value);
 
@@ -317,13 +355,13 @@ export class ModalResap33Component implements OnInit {
             this.resetForm();
         }
     }
-    agregadoHabiltado4(){
+    agregadoHabiltado4() {
         return (
             this.nuevoConocimiento4.trim() != '' || this.selectedCurso4 != null
         );
     }
 
-    editarPregunta4(conocimient: any, index: number){
+    editarPregunta4(conocimient: any, index: number) {
         this.nuevoConocimiento4 = conocimient.nombre || conocimient;
         this.editando4 = true;
         this.indexEdicion4 = index;
@@ -350,11 +388,10 @@ export class ModalResap33Component implements OnInit {
         }
     }
 
-    resetForm(){
+    resetForm() {
         this.nuevoConocimiento4 = '';
         this.selectedCurso4 = null;
         this.editando4 = false;
         this.indexEdicion4 = null;
     }
-
 }

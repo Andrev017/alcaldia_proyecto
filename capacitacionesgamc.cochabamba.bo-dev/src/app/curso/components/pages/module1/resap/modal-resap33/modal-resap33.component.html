@@ -14,10 +14,11 @@
                 <ng-template pTemplate="left">
                     <div class="my-2 d-flex align-items-center" style="display: flex; flex-wrap: nowrap;">
 
-                        <p-dropdown [options]="sector" [(ngModel)]="listSector" optionLabel="name"
-                            placeholder="A qué sector pertenece" style="margin-right: 500px;"
-                            (ngModelChange)="onSectorChange($event)">
+                        <p-dropdown [options]="sectorData" [(ngModel)]="formData.resap33.sector" optionLabel="sectores"
+                            optionValue="sectores" placeholder="A qué sector pertenece"
+                            [style]="{'margin-right': '500px'}" (onChange)="onInputChange()" name="sector">
                         </p-dropdown>
+
 
 
                         <p class="text-700 font-bold mb-0" style="white-space: nowrap;">
@@ -56,15 +57,18 @@
 
                     <div class="flex align-items-center mb-2">
                         <div class="text-500 font-bold w-4" for="input1">Secretraria: </div>
-                        <!-- <input type="text" pInputText style="width: 400px; text-transform: uppercase;" /> -->
+
                         <input id="input1" type="text" pInputText style="width: 400px; text-transform: uppercase;"
-                            [(ngModel)]="inputSecretaria" (ngModelChange)="onInput1Change($event)" name="input1" />
+                            [(ngModel)]="formData.resap33.secretaria" (ngModelChange)="onInputChange()"
+                            name="secretaria" />
                     </div>
 
                     <div class="flex align-items-center mb-2" for="input2">
                         <div class="text-500 font-bold w-4">Dirreción/Comuna: </div>
-                        <input id="input2" type="text" pInputText style="width: 400px; text-transform: uppercase;"
-                            [(ngModel)]="inputDireccion" (ngModelChange)="onInput2Change($event)" name="input2" />
+                        <input id="input-direccion" type="text" pInputText
+                            style="width: 400px; text-transform: uppercase;" [(ngModel)]="formData.resap33['dirección']"
+                            (ngModelChange)="onInputChange()" name="direccion" />
+
                     </div>
 
                     <div class="flex align-items-center mb-2">
@@ -99,9 +103,10 @@
                 [toggleable]="true">
                 <div class="flex flex-column py-0 px-2 surface-border">
                     <label>
-                        Conocimiento:
-                        <p-dropdown [options]="cursos" [(ngModel)]="selectedCurso" optionLabel="nombre"
-                            placeholder="Selecciona un conocimiento" (onChange)="cambioDropdown()">
+                        Conocimiento:   
+                        <p-dropdown [options]="cursos" [(ngModel)]="formData.conAmpliar[0].id_curso"
+                            optionLabel="nombre" placeholder="Selecciona un conocimiento" (onChange)="onInputChange()"
+                            name="id_curso">
                         </p-dropdown>
                     </label>
                     <br />
@@ -299,7 +304,7 @@
                             <tr>
                                 <td>{{ curso.nombre || curso }}</td>
 
-                                
+
                                 <td style="display: flex; justify-content: center; margin: 0 auto;">
                                     <button pButton pRipple icon="pi pi-pencil"
                                         class="p-button-rounded p-button-info m-1" title="Editar"
@@ -324,7 +329,7 @@
             class="p-button-text"></button>
 
         <button pButton type="button" label="Guardar" icon="pi pi-check" class="p-button-text m-4"
-            (click)="guardar()"></button>
+            (click)="onInputChange()"></button>
 
     </div>
 </p-dialog>
