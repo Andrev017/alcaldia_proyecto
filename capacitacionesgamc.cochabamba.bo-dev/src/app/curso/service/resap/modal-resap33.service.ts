@@ -11,7 +11,6 @@ import { Resap33, Resap33Response } from '../../api/resap33.model';
 })
 export class ModalResap33Service {
     private visibilitySubject = new Subject<boolean>();
-    
 
     visibilityChange = this.visibilitySubject.asObservable();
 
@@ -60,11 +59,18 @@ export class ModalResap33Service {
             );
     }
 
-    saveResap33(inputdata: any) {
-        const headers = new HttpHeaders(environment.httpHeaders);
-        return this.http.post<Resap33Response>(`${this.apiUrl}`, inputdata, {
-            headers,
+    // saveResap33(inputdata: any) {
+    //     const headers = new HttpHeaders(environment.httpHeaders);
+    //     return this.http.post<Resap33Response>(`${this.apiUrl}`, inputdata, {
+    //         headers,
+    //     });
+    // }
+
+    saveResap33(payload: any, tokenUSER: string): Observable<any> {
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${tokenUSER}`,
         });
+        return this.http.post<any>(`${this.apiUrl}`, payload, { headers });
     }
 
     updateResap33(inputdata: any, uuid: string) {

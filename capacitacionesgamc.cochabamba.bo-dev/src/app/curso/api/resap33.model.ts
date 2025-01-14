@@ -23,14 +23,14 @@ export interface Resap33 {
     activo:                 string;
     updatedAt:              Date;
     id_empleado:            number;
-    empelado_resap33:       EmpleadoResap33;
+    // empelado_resap33:       EmpleadoResap33;
 }
 
-export interface EmpleadoResap33 {
-    id:                     number;
-    uuid:                   string;
-    codigo:                 string;
-}
+// export interface EmpleadoResap33 {
+//     id:                     number;
+//     uuid:                   string;
+//     codigo:                 string;
+// }
 
 
 export interface ConocimientosExigidos {
@@ -58,3 +58,13 @@ export interface FuncionConocimiento {
     prioridad:              string;
     updatedAt:              Date;
 }
+
+export interface CapacitadorMaterias {
+    id:                     number;
+    uuid:                   string;
+    conocimientos:          string;
+    es_otro:                string; //INCLUIR LA TABLA A LA BD
+    updatedAt:              Date;
+
+}
+

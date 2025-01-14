@@ -22,17 +22,13 @@ export class ModalResap33Component implements OnInit {
     displayModal: boolean = false;
     inicioEnumeracion = 1;
 
-    inputSecretaria: string = '';
-    inputDireccion: string = '';
-
-    datosExtraidos: any; //varible del servicio
-
     tabla2: any[] = [];
     nuevoConocimiento2: string = '';
 
     funcion3: any = ''; //pregunta3
     conocimiento3: any = '';
     prioridad3: string = '';
+
     tabla3: any[] = [];
 
     tabla4: any[] = []; //pregunta4
@@ -52,12 +48,14 @@ export class ModalResap33Component implements OnInit {
     public auth: any;
     private userSubscription: Subscription;
     public cursos: Curso[] = [];
+    public keydata1: any = [];
     selectedCurso: any = null;
-
+    es_otro: boolean = false;
+    otroConocimiento: string = '';
     //-------------------------------- Combo Box ----------------------------------------
 
-    listSector: any;
-    listConocim: any;
+    // listSector: any;
+    // listConocim: any;
     sectorData: Array<{ sectores: string }> = [
         { sectores: 'SECTOR OPERATIVO' },
         { sectores: 'SECTOR ADMINISTRATIVO' },
@@ -65,15 +63,17 @@ export class ModalResap33Component implements OnInit {
 
     formData: {
         resap33: {
+            id_empleado: number;
             sector: string;
             secretaria: string;
             dirección: string;
             gestion: number;
         };
         conExigido: Array<{ conocimientos: string }>;
+
         conAmpliar: Array<{
             conocimientos?: string;
-            id_curso: any|number;
+            id_curso: any | number;
             es_otro: boolean;
         }>;
         funcionCon: Array<{
@@ -81,25 +81,40 @@ export class ModalResap33Component implements OnInit {
             conocimiento_demandado: string;
             prioridad: string;
         }>;
-        capMateria: Array<{ materias: string }>;
+        capMateria: Array<{
+            materias: string;
+            id_curso: any | number;
+            es_otro2: boolean;
+        }>;
     } = {
         resap33: {
+            id_empleado: 0,
             sector: '',
             secretaria: '',
             dirección: '',
             gestion: new Date().getFullYear(),
         },
-        conExigido: [{ conocimientos: '' }],
-        conAmpliar: [{ conocimientos: '', id_curso: '', es_otro: false }],
-        funcionCon: [
-            { funciones: '', conocimiento_demandado: '', prioridad: '' },
+        conExigido: [],
+        conAmpliar: [],
+        funcionCon: [],
+        capMateria: [
+            { materias: 'Materia A', id_curso: 3, es_otro2: false },
+            { materias: 'Materia A', id_curso: 3, es_otro2: false }
+
         ],
-        capMateria: [{ materias: '' }],
     };
 
-    onInputChange() {
-        console.log(this.formData);
-    }
+    // onInputChangePregunta2(): void {
+
+    //         this.formData.conAmpliar.push({
+    //             conocimientos: selectedCourse.nombre,
+    //             id_curso: selectedCourse.id,
+    //             es_otro: false,
+    //         });
+
+    //     console.log('Updated conAmpliar:', this.formData.conAmpliar);
+    // }
+
     onSectorChange(value: any): void {
         console.log('Sector seleccionado:', value);
 
@@ -133,6 +148,31 @@ export class ModalResap33Component implements OnInit {
         ); //-----------------------------------------------------------------
     }
     //-----------------------------------------------------------------------------------------------------
+    onInputChange(): void {
+        this.formData.resap33.id_empleado = this.auth.emp.id;
+
+        let tokenUSER = this.auth.token;
+        this.modal_resap33.saveResap33(this.formData, tokenUSER).subscribe({
+            next: (response) => {
+                console.log('Respuesta del servidor:', response);
+                Swal.fire(
+                    'Éxito',
+                    'Los datos se enviaron correctamente',
+                    'success'
+                );
+                this.cerrarModal();
+            },
+            error: (err) => {
+                console.error('Error al enviar datos:', err);
+                Swal.fire(
+                    'Error',
+                    'Ocurrió un problema al enviar los datos',
+                    'error'
+                );
+            },
+        });
+        console.log('Updated conAmpliar:', this.formData);
+    }
 
     ngOnInit(): void {
         setInterval(() => {
@@ -148,14 +188,6 @@ export class ModalResap33Component implements OnInit {
         //     name: [''], // Input
         //     sector: [''], // Select
         // });
-    }
-
-    onInput1Change(value: string): void {
-        this.inputSecretaria = value;
-    }
-
-    onInput2Change(value: string): void {
-        this.inputDireccion = value;
     }
 
     // datosService() {
@@ -226,8 +258,13 @@ export class ModalResap33Component implements OnInit {
         const textarea = event.target as HTMLTextAreaElement;
         if (event.key === 'Enter') {
             event.preventDefault();
-            const value = textarea.value;
-            textarea.value = value + '\n' + `${++this.inicioEnumeracion}. `;
+            const lines = textarea.value.split('\n');
+            const lastLine = lines[lines.length - 1];
+            this.formData.conExigido.push({
+                conocimientos: lastLine,
+            });
+            textarea.value += `\n${++this.inicioEnumeracion}. `;
+            console.log('keydata1:', this.keydata1);
         }
     }
 
@@ -240,18 +277,23 @@ export class ModalResap33Component implements OnInit {
         });
     }
 
-    agregarPregunta2() {
-        const nuevoConocimiento =
-            this.nuevoConocimiento2.trim() || this.selectedCurso;
-        if (nuevoConocimiento) {
-            this.tabla2.push(nuevoConocimiento);
-            this.resetFormulario();
-        }
+    agregarNuevoConocimiento(
+        conocimiento: string = '',
+        es_otro: boolean = false
+    ): void {
+        this.formData.conAmpliar.push({
+            conocimientos: conocimiento || this.selectedCurso.nombre,
+            id_curso: es_otro ? null : this.selectedCurso.id,
+            es_otro: es_otro,
+        });
+        this.tabla2.push(this.formData.conAmpliar[0].conocimientos);
+        console.log('Updated conAmpliar:', this.formData.conAmpliar);
     }
 
     agregadoHabiltado2() {
         return (
-            this.nuevoConocimiento2.trim() !== '' || this.selectedCurso !== null
+            this.formData.conAmpliar[0].es_otro !== false ||
+            this.formData.conAmpliar[0].id_curso !== null
         );
     }
 
@@ -276,10 +318,10 @@ export class ModalResap33Component implements OnInit {
         console.log('Curso seleccionado:', this.selectedCurso);
     }
 
-    cambioEtrada() {
-        if (this.nuevoConocimiento2.trim()) {
-            this.selectedCurso = null;
-        }
+    cambioEtrada(event: any): void {
+        const inputValue = event.target.value;
+        this.otroConocimiento = inputValue;
+        console.log('Updated conAmpliar:', this.formData.conAmpliar);
     }
 
     resetFormulario() {
@@ -290,6 +332,21 @@ export class ModalResap33Component implements OnInit {
     }
 
     // -------------------------------------Pregunta 3------------------------------------------------
+
+    agregarPregunta3ForInput(): void {
+        this.formData.funcionCon.push({
+            funciones: this.funcion3,
+            conocimiento_demandado: this.conocimiento3,
+            prioridad: this.prioridad3,
+        });
+        this.tabla3.push({
+            funcion: this.formData.funcionCon[0].funciones,
+            conocimiento: this.formData.funcionCon[0].conocimiento_demandado,
+            prioridad: this.formData.funcionCon[0].prioridad,
+        });
+        console.log('Updated conAmpliar:', this.formData.funcionCon);
+    }
+
     agregarPregunta3() {
         if (!this.funcion3 || !this.conocimiento3 || !this.prioridad3) {
             alert('Todos los campos son requeridos');
@@ -349,15 +406,23 @@ export class ModalResap33Component implements OnInit {
     //-----------------------------------------------------------
     agregarPregunta4() {
         const nuevoConocimient =
-            this.nuevoConocimiento4.trim() || this.selectedCurso4;
+            this.formData.capMateria[0].es_otro2 ||
+            this.formData.capMateria[0].id_curso;
         if (nuevoConocimient) {
             this.tabla4.push(nuevoConocimient);
             this.resetForm();
         }
+        //     this.nuevoConocimiento4.trim() || this.selectedCurso4;
+        // if (nuevoConocimient) {
+        //     this.tabla4.push(nuevoConocimient);
+        //     this.resetForm();
+        // }
     }
+
     agregadoHabiltado4() {
         return (
-            this.nuevoConocimiento4.trim() != '' || this.selectedCurso4 != null
+            this.formData.capMateria[0].es_otro2 !== false ||
+            this.formData.capMateria[0].id_curso !== null
         );
     }
 
@@ -389,7 +454,8 @@ export class ModalResap33Component implements OnInit {
     }
 
     resetForm() {
-        this.nuevoConocimiento4 = '';
+        this.formData.capMateria[0].es_otro2 = false;
+        this.cursos4 = [];
         this.selectedCurso4 = null;
         this.editando4 = false;
         this.indexEdicion4 = null;
