@@ -16,7 +16,7 @@
 
                         <p-dropdown [options]="sectorData" [(ngModel)]="formData.resap33.sector" optionLabel="sectores"
                             optionValue="sectores" placeholder="A qué sector pertenece"
-                            [style]="{'margin-right': '500px'}"  name="sector">
+                            [style]="{'margin-right': '500px'}" name="sector">
                         </p-dropdown>
 
 
@@ -60,7 +60,7 @@
 
                         <input id="input1Secretaria" type="text" pInputText
                             style="width: 400px; text-transform: uppercase;" [(ngModel)]="formData.resap33.secretaria"
-                             name="secretaria" />
+                            name="secretaria" />
                     </div>
 
                     <div class="flex align-items-center mb-2">
@@ -68,7 +68,7 @@
 
                         <input id="input-direccion" type="text" pInputText
                             style="width: 400px; text-transform: uppercase;" [(ngModel)]="formData.resap33['dirección']"
-                             name="direccion" />
+                            name="direccion" />
                     </div>
 
                     <div class="flex align-items-center mb-2">
@@ -125,7 +125,8 @@
                         </label>
 
                         <button pButton type="button" label="Agregar" icon="pi pi-plus" class="p-button-success"
-                        (click)="agregarNuevoConocimiento(otroConocimiento, otroConocimiento ? true : false)" title="Elija uno para AGREGAR"></button>
+                            (click)="agregarNuevoConocimiento(otroConocimiento, otroConocimiento ? true : false)"
+                            title="Elija uno para AGREGAR"></button>
                         <!-- 
                         <button *ngIf="editando2" pButton type="button" label="Guardar" icon="pi pi-save"
                             class="p-button-warning" "></button> -->
@@ -170,9 +171,8 @@
                     <div class="flex justify-content-between flex-column sm:flex-row">
                         <label>
                             Función:
-                            <input id="input-funcion" type="text" pInputText
-                                [(ngModel)]="funcion3" style="width: 600px; margin-left: 45px;"
-                                 name="funcion" />
+                            <input id="input-funcion" type="text" pInputText [(ngModel)]="funcion3"
+                                style="width: 600px; margin-left: 45px;" name="funcion" />
                         </label>
                     </div>
                     <br><br>
@@ -182,9 +182,8 @@
                             <label style="margin-right: 10px;">
                                 Conocimiento:
                             </label>
-                            <textarea id="input-conocim" rows="3" pInputText
-                                [(ngModel)]="conocimiento3" style="width: 600px;"
-                                 name="conocim"></textarea>
+                            <textarea id="input-conocim" rows="3" pInputText [(ngModel)]="conocimiento3"
+                                style="width: 600px;" name="conocim"></textarea>
                             <!--<input id="input-funcion" type="text" pInputText [(ngModel)]="formData.funcionCon[0].funciones"
                             style="width: 600px; margin-left: 45px;"  name="funcion"/>-->
                         </div>
@@ -268,14 +267,14 @@
             <!-- ------------------------------------ PREGUNTA 4 ----------------------------------------------- -->
 
             <p-fieldset
-                legend="2. Que conocimientos se requiere ampliar o conocer el trabajador y/o servidor Público, para poder desempeñar óptimamente sus funciones"
+                legend="4. Mencione las materias en las que el trabajador y/o servidor publico tiene conociminetos profundos y podria actuar como capacitador"
                 [toggleable]="true">
                 <div class="flex flex-column py-0 px-2 surface-border">
                     <label>
                         Conocimiento:
                         <p-dropdown [options]="cursos4" [(ngModel)]="formData.capMateria[0].id_curso"
                             optionLabel="nombre" placeholder="Selecciona un conocimiento" (onChange)="cambioDropdown4()"
-                             name="funcion">
+                            name="funcion">
                         </p-dropdown>
                     </label>
                     <br />
@@ -285,7 +284,7 @@
                             Otro:
                             <input id="input-otro2" type="text" pInputText [(ngModel)]="formData.capMateria[0].es_otro2"
                                 style="width: 300px; margin-left: 70px;" (input)="cambioEtrada4()"
-                                [disabled]="selectedCurso4 !== null"  name="funcion" />
+                                [disabled]="selectedCurso4 !== null" name="funcion" />
                         </label>
 
                         <button *ngIf="!editando4" pButton type="button" label="Agregar" icon="pi pi-plus"
