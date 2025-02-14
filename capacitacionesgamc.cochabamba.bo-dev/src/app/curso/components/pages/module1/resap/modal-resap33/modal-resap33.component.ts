@@ -23,12 +23,11 @@ export class ModalResap33Component implements OnInit {
     inicioEnumeracion = 1;
 
     tabla2: any[] = [];
-    nuevoConocimiento2: string = '';
+    nuevoConocimiento2: any = '';
 
     funcion3: any = ''; //pregunta3
     conocimiento3: any = '';
     prioridad3: string = '';
-
     tabla3: any[] = [];
 
     tabla4: any[] = []; //pregunta4
@@ -54,8 +53,6 @@ export class ModalResap33Component implements OnInit {
     otroConocimiento: string = '';
     //-------------------------------- Combo Box ----------------------------------------
 
-    // listSector: any;
-    // listConocim: any;
     sectorData: Array<{ sectores: string }> = [
         { sectores: 'SECTOR OPERATIVO' },
         { sectores: 'SECTOR ADMINISTRATIVO' },
@@ -82,7 +79,7 @@ export class ModalResap33Component implements OnInit {
             prioridad: string;
         }>;
         capMateria: Array<{
-            materias: string;
+            materias?: string;
             id_curso: any | number;
             es_otro2: boolean;
         }>;
@@ -97,11 +94,7 @@ export class ModalResap33Component implements OnInit {
         conExigido: [],
         conAmpliar: [],
         funcionCon: [],
-        capMateria: [
-            { materias: 'Materia A', id_curso: 3, es_otro2: false },
-            { materias: 'Materia A', id_curso: 3, es_otro2: false }
-
-        ],
+        capMateria: [],
     };
 
     // onInputChangePregunta2(): void {
@@ -163,6 +156,7 @@ export class ModalResap33Component implements OnInit {
                 this.cerrarModal();
             },
             error: (err) => {
+                this.cerrarModal();
                 console.error('Error al enviar datos:', err);
                 Swal.fire(
                     'Error',
@@ -281,13 +275,19 @@ export class ModalResap33Component implements OnInit {
         conocimiento: string = '',
         es_otro: boolean = false
     ): void {
-        this.formData.conAmpliar.push({
-            conocimientos: conocimiento || this.selectedCurso.nombre,
-            id_curso: es_otro ? null : this.selectedCurso.id,
+        if (!conocimiento && !this.selectedCurso) {
+            alert("Debe seleccionar un conocimiento o ingresar uno nuevo.");
+            return;
+        }
+        const nuevoConocimiento = {
+            conocimientos: conocimiento || this.selectedCurso?.nombre,
+            id_curso: es_otro ? null : this.selectedCurso?.id,
             es_otro: es_otro,
-        });
-        this.tabla2.push(this.formData.conAmpliar[0].conocimientos);
+        };
+        this.formData.conAmpliar.push(nuevoConocimiento);
+        this.tabla2 = [...this.tabla2, nuevoConocimiento.conocimientos];
         console.log('Updated conAmpliar:', this.formData.conAmpliar);
+        this.resetFormulario();
     }
 
     agregadoHabiltado2() {
@@ -298,20 +298,27 @@ export class ModalResap33Component implements OnInit {
     }
 
     editarPregunta2(conocimiento: any, index: number) {
-        this.nuevoConocimiento2 = conocimiento.nombre || conocimiento;
-        this.editando2 = true;
+        this.otroConocimiento = conocimiento;
         this.indexEdicion = index;
+        this.editando2 = true;
     }
 
     guardarEdicionPregunta2() {
-        if (this.indexEdicion !== null) {
-            this.tabla2[this.indexEdicion] = this.nuevoConocimiento2.trim();
+        if (this.indexEdicion !== null && this.otroConocimiento.trim() !== '') {
+            // Actualiza tanto la tabla como el array original
+            this.formData.conAmpliar[this.indexEdicion].conocimientos =
+                this.otroConocimiento.trim();
+            this.tabla2[this.indexEdicion] = this.otroConocimiento.trim();
             this.resetFormulario();
         }
     }
 
     eliminarPregunta2(index: number) {
-        this.tabla2.splice(index, 1);
+        this.formData.conAmpliar.splice(index, 1);
+        this.tabla2 = [
+            ...this.formData.conAmpliar.map((item) => item.conocimientos),
+        ];
+        console.log('Elemento eliminado', this.formData.conAmpliar);
     }
 
     cambioDropdown() {
@@ -325,26 +332,31 @@ export class ModalResap33Component implements OnInit {
     }
 
     resetFormulario() {
-        this.nuevoConocimiento2 = '';
+        this.otroConocimiento = '';
         this.selectedCurso = null;
         this.editando2 = false;
         this.indexEdicion = null;
     }
 
     // -------------------------------------Pregunta 3------------------------------------------------
-
     agregarPregunta3ForInput(): void {
-        this.formData.funcionCon.push({
-            funciones: this.funcion3,
+        if (!this.funcion3 || !this.conocimiento3 || !this.prioridad3) {
+            alert('Todos los campos son requeridos');
+            return;
+        }
+        const nuevoElemento = {
+            funciones: this.funcion3,  
             conocimiento_demandado: this.conocimiento3,
             prioridad: this.prioridad3,
-        });
+        };
+        this.formData.funcionCon.push(nuevoElemento);
         this.tabla3.push({
-            funcion: this.formData.funcionCon[0].funciones,
-            conocimiento: this.formData.funcionCon[0].conocimiento_demandado,
-            prioridad: this.formData.funcionCon[0].prioridad,
+            funcion: nuevoElemento.funciones, 
+            conocimiento: nuevoElemento.conocimiento_demandado, 
+            prioridad: nuevoElemento.prioridad
         });
-        console.log('Updated conAmpliar:', this.formData.funcionCon);
+        console.log('Nueva lista:', this.formData.funcionCon);
+        this.limpiarCampos();
     }
 
     agregarPregunta3() {
@@ -352,19 +364,17 @@ export class ModalResap33Component implements OnInit {
             alert('Todos los campos son requeridos');
             return;
         }
-
         this.tabla3.push({
             funcion: this.funcion3,
             conocimiento: this.conocimiento3,
             prioridad: this.prioridad3,
         });
-
         this.limpiarCampos();
     }
 
     editarPregunta3(item: any, index: number) {
-        this.funcion3 = item.funcion;
-        this.conocimiento3 = item.conocimiento;
+        this.funcion3 = item.funcion || item.funciones;
+        this.conocimiento3 = item.conocimiento || item.conocimiento_demandado;
         this.prioridad3 = item.prioridad;
         this.editando3 = true;
         this.indexEdicion3 = index;
@@ -372,17 +382,26 @@ export class ModalResap33Component implements OnInit {
 
     guardarEdicionPregunta3() {
         if (this.indexEdicion3 !== null) {
+            const nuevoElemento = {
+                funciones: this.funcion3,
+                conocimiento_demandado: this.conocimiento3,
+                prioridad: this.prioridad3,
+            };
+            this.formData.funcionCon[this.indexEdicion3] = nuevoElemento;
             this.tabla3[this.indexEdicion3] = {
                 funcion: this.funcion3,
                 conocimiento: this.conocimiento3,
                 prioridad: this.prioridad3,
             };
+            console.log('Datos actualizados:', this.formData.funcionCon);
             this.limpiarCampos();
         }
     }
 
     eliminarPregunta3(index: number) {
-        this.tabla3.splice(index, 1);
+        this.formData.funcionCon.splice(index, 1);
+        this.tabla3 = [...this.formData.funcionCon];
+        console.log('Datos eliminados, nueva lista:', this.formData.funcionCon);
     }
 
     limpiarCampos() {
@@ -396,6 +415,8 @@ export class ModalResap33Component implements OnInit {
     //---------------- Parte del backend -----------------------------
     public cursos4: Curso[] = [];
     selectedCurso4: any = null;
+    es_otro2: boolean = false;
+    otroConocimiento2: string = '';
 
     GetPregumta4() {
         const params = {};
@@ -404,19 +425,23 @@ export class ModalResap33Component implements OnInit {
         });
     }
     //-----------------------------------------------------------
-    agregarPregunta4() {
-        const nuevoConocimient =
-            this.formData.capMateria[0].es_otro2 ||
-            this.formData.capMateria[0].id_curso;
-        if (nuevoConocimient) {
-            this.tabla4.push(nuevoConocimient);
-            this.resetForm();
+    agregarNuevoConocimiento4(
+        conocimiento_2: string = '', 
+        es_otro_2: boolean = false
+    ): void {
+        if (!conocimiento_2 && !this.selectedCurso4) {
+            alert("Debe seleccionar un conocimiento o ingresar uno nuevo.");
+            return;
         }
-        //     this.nuevoConocimiento4.trim() || this.selectedCurso4;
-        // if (nuevoConocimient) {
-        //     this.tabla4.push(nuevoConocimient);
-        //     this.resetForm();
-        // }
+        const nuevoConocimiento = {
+            materias: conocimiento_2 || this.selectedCurso4.nombre,
+            id_curso: es_otro_2 ? null : this.selectedCurso4.id,
+            es_otro2: es_otro_2
+        };
+        this.formData.capMateria.push(nuevoConocimiento);
+        this.tabla4.push(nuevoConocimiento); 
+        console.log("Nueva lista:", this.formData.capMateria);
+        this.resetForm();
     }
 
     agregadoHabiltado4() {
@@ -427,20 +452,34 @@ export class ModalResap33Component implements OnInit {
     }
 
     editarPregunta4(conocimient: any, index: number) {
-        this.nuevoConocimiento4 = conocimient.nombre || conocimient;
+        this.otroConocimiento2 = conocimient.materias; 
+        this.selectedCurso4 = null;
         this.editando4 = true;
         this.indexEdicion4 = index;
     }
+    
 
-    guardarEdicionPregunta4() {
+    guardarEdicionPregunta4(): void {
         if (this.indexEdicion4 !== null) {
-            this.tabla4[this.indexEdicion4] = this.nuevoConocimiento4.trim();
+            const conocimientoEditado = this.nuevoConocimiento4.trim();
+            
+            // if (!conocimientoEditado) {
+            //     alert("El conocimiento no puede estar vacío.");
+            //     return;
+            // }
+    
+            this.formData.capMateria[this.indexEdicion4].materias = conocimientoEditado;
+            this.tabla4[this.indexEdicion4].materias = conocimientoEditado;
+        
+            console.log("Datos actualizados:", this.formData.capMateria);
             this.resetForm();
         }
     }
 
-    eliminarPregunta4(index: number) {
-        this.tabla4.splice(index, 1);
+    eliminarPregunta4(index: number): void {
+        this.formData.capMateria.splice(index, 1);
+        this.tabla4.splice(index, 1); 
+        console.log("Datos eliminados, nueva lista:", this.formData.capMateria);
     }
 
     cambioDropdown4() {
@@ -453,10 +492,9 @@ export class ModalResap33Component implements OnInit {
         }
     }
 
-    resetForm() {
-        this.formData.capMateria[0].es_otro2 = false;
-        this.cursos4 = [];
-        this.selectedCurso4 = null;
+    resetForm(): void {
+        this.otroConocimiento2 = ''; 
+        this.selectedCurso4 = null; 
         this.editando4 = false;
         this.indexEdicion4 = null;
     }

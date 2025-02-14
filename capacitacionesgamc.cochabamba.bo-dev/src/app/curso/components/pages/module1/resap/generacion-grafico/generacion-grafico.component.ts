@@ -18,7 +18,7 @@ export class GeneracionGraficoComponent implements OnInit {
     products: any;
     isVisible: boolean = false;
     public resap33get: any;
-    public auth: any; //AuthResponse ;
+    public auth: any;
     private userSubscription: Subscription;
 
 
@@ -83,10 +83,7 @@ export class GeneracionGraficoComponent implements OnInit {
         );
     }//---------------------------------------------------
 
-
-
-
-
+    
 
     createChart() {
         if (this.barChart) {
@@ -107,7 +104,7 @@ export class GeneracionGraficoComponent implements OnInit {
             'curso11',
             'curso12',
             'curso13',
-            'curso14',
+            'Otros',
         ];
 
         const empleadosPorCurso = [
@@ -125,7 +122,7 @@ export class GeneracionGraficoComponent implements OnInit {
                     labels: cursos,
                     datasets: [
                         {
-                            label: 'Número de Empleados',
+                            label: 'Cursos Solicitados por Empleado',
                             data: empleadosPorCurso,
                             backgroundColor: 'rgba(75, 192, 192, 0.2)',
                             borderColor: 'rgba(75, 192, 192, 1)',
@@ -146,7 +143,7 @@ export class GeneracionGraficoComponent implements OnInit {
                         },
                         title: {
                             display: true,
-                            text: 'Cursos Solicitados por Empleado',
+                            text: 'Numero de Empleados',
                         },
                     },
                 },

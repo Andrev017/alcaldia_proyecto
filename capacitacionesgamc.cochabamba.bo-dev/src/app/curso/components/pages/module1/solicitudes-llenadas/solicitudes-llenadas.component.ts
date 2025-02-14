@@ -38,14 +38,14 @@ export class SolicitudesLlenadasComponent implements OnInit {
                 this.resap33get = sect;
             });
 
-        // this.serviceResap33.getResap33AllParameter().subscribe({
-        //     next: (resp) => {
-        //         this.resap33get = resp;
-        //     },
-        //     error: (e) => {
-        //         console.log('error: ', e);
-        //     },
-        // });
+        this.serviceResap33.getResap33AllParameter().subscribe({
+            next: (data) => {
+                this.resap33get = data; 
+            },
+            error: (e) => {
+                console.error('Error al obtener resap33:', e);
+            },
+        });
     }
 
     ngOnInit() {
@@ -76,26 +76,4 @@ export class SolicitudesLlenadasComponent implements OnInit {
         this.filter.nativeElement.value = '';
     } //-------------------------------------------
 
-    llenadoSolid = [
-        {
-            gestion: '2023',
-            nombre: 'andre',
-            carnet: 936452,
-        },
-        {
-            gestion: '1995',
-            nombre: 'nicolas',
-            carnet: 336478,
-        },
-        {
-            gestion: '2015',
-            nombre: 'micaela',
-            carnet: 736446,
-        },
-        {
-            gestion: '2008',
-            nombre: 'robert',
-            carnet: 326457,
-        },
-    ];
 }

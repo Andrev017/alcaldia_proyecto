@@ -104,17 +104,10 @@
                 <div class="flex flex-column py-0 px-2 surface-border">
                     <label>
                         Conocimiento:
-                        <!-- <p-dropdown [options]="cursos" [(ngModel)]="formData.conAmpliar[0].id_curso"
-                                optionLabel="nombre" placeholder="Selecciona un conocimiento" (onChange)="agregarNuevoConocimiento()"
-                                name="id_curso">
-                            </p-dropdown> -->
-
                         <p-dropdown [options]="cursos" [(ngModel)]="selectedCurso" optionLabel="nombre"
                             placeholder="Selecciona un conocimiento" name="id_curso">
                         </p-dropdown>
                     </label>
-
-
                     <br />
 
                     <div class="flex justify-content-between flex-column sm:flex-row">
@@ -124,12 +117,16 @@
                                 style="width: 300px; margin-left: 70px;" (input)="cambioEtrada($event)" name="otro" />
                         </label>
 
-                        <button pButton type="button" label="Agregar" icon="pi pi-plus" class="p-button-success"
+                        <button *ngIf="!editando2" pButton type="button" label="Agregar" icon="pi pi-plus"
+                            class="p-button-success"
                             (click)="agregarNuevoConocimiento(otroConocimiento, otroConocimiento ? true : false)"
-                            title="Elija uno para AGREGAR"></button>
-                        <!-- 
+                            title="Elija uno para AGREGAR">
+                        </button>
+
                         <button *ngIf="editando2" pButton type="button" label="Guardar" icon="pi pi-save"
-                            class="p-button-warning" "></button> -->
+                            class="p-button-warning" (click)="guardarEdicionPregunta2()">
+                        </button>
+
                     </div>
                     <br />
 
@@ -146,13 +143,15 @@
                             </tr>
                         </ng-template>
 
-                        <ng-template pTemplate="body" let-conocimientos let-rowIndex="rowIndex">
+                        <ng-template pTemplate="body" let-conAmpliar let-rowIndex="rowIndex">
                             <tr>
-                                <td>{{ conocimientos || es_otro }}</td>
+                                <td>{{ conAmpliar }}</td>
                                 <td style="display: flex; justify-content: center; margin: 0 auto;">
+
                                     <button pButton pRipple icon="pi pi-pencil"
                                         class="p-button-rounded p-button-info m-1" title="Editar"
-                                        (click)="editarPregunta2(selectedCurso, rowIndex)"></button>
+                                        (click)="editarPregunta2(conAmpliar, rowIndex)"></button>
+
                                     <button pButton pRipple icon="pi pi-trash"
                                         class="p-button-rounded p-button-danger m-1" title="Dar de Baja"
                                         (click)="eliminarPregunta2(rowIndex)"></button>
@@ -184,8 +183,7 @@
                             </label>
                             <textarea id="input-conocim" rows="3" pInputText [(ngModel)]="conocimiento3"
                                 style="width: 600px;" name="conocim"></textarea>
-                            <!--<input id="input-funcion" type="text" pInputText [(ngModel)]="formData.funcionCon[0].funciones"
-                            style="width: 600px; margin-left: 45px;"  name="funcion"/>-->
+
                         </div>
                     </div><br><br>
 
@@ -272,9 +270,8 @@
                 <div class="flex flex-column py-0 px-2 surface-border">
                     <label>
                         Conocimiento:
-                        <p-dropdown [options]="cursos4" [(ngModel)]="formData.capMateria[0].id_curso"
-                            optionLabel="nombre" placeholder="Selecciona un conocimiento" (onChange)="cambioDropdown4()"
-                            name="funcion">
+                        <p-dropdown [options]="cursos4" [(ngModel)]="selectedCurso4" optionLabel="nombre"
+                            placeholder="Selecciona un conocimiento" name="id_curso">
                         </p-dropdown>
                     </label>
                     <br />
@@ -282,17 +279,21 @@
                     <div class="flex justify-content-between flex-column sm:flex-row">
                         <label>
                             Otro:
-                            <input id="input-otro2" type="text" pInputText [(ngModel)]="formData.capMateria[0].es_otro2"
-                                style="width: 300px; margin-left: 70px;" (input)="cambioEtrada4()"
-                                [disabled]="selectedCurso4 !== null" name="funcion" />
+                            <input id="input-otro" type="text" pInputText [(ngModel)]="otroConocimiento2"
+                                style="width: 300px; margin-left: 70px;" (input)="cambioEtrada($event)" name="otro" />
+
                         </label>
 
                         <button *ngIf="!editando4" pButton type="button" label="Agregar" icon="pi pi-plus"
-                            class="p-button-success" (click)="agregarPregunta4()" [disabled]="!agregadoHabiltado4()"
-                            title="Elija uno para AGREGAR"></button>
+                            class="p-button-success"
+                            (click)="agregarNuevoConocimiento4(otroConocimiento2, otroConocimiento2 ? true : false)"
+                            title="Elija uno para AGREGAR">
+                        </button>
 
                         <button *ngIf="editando4" pButton type="button" label="Guardar" icon="pi pi-save"
-                            class="p-button-warning" (click)="guardarEdicionPregunta4()"></button>
+                            class="p-button-warning" (click)="guardarEdicionPregunta4()">
+                        </button>
+
                     </div>
                     <br />
 
@@ -309,15 +310,14 @@
                             </tr>
                         </ng-template>
 
-                        <ng-template pTemplate="body" let-curso let-rowIndex="rowIndex">
+                        <ng-template pTemplate="body" let-capMateria let-rowIndex="rowIndex">
                             <tr>
-                                <td>{{ curso.nombre || curso }}</td>
-
-
+                                <td>{{ capMateria.materias }}</td>
                                 <td style="display: flex; justify-content: center; margin: 0 auto;">
+
                                     <button pButton pRipple icon="pi pi-pencil"
                                         class="p-button-rounded p-button-info m-1" title="Editar"
-                                        (click)="editarPregunta4(curso, rowIndex)"></button>
+                                        (click)="editarPregunta4(capMateria, rowIndex)"></button>
                                     <button pButton pRipple icon="pi pi-trash"
                                         class="p-button-rounded p-button-danger m-1" title="Dar de Baja"
                                         (click)="eliminarPregunta4(rowIndex)"></button>

@@ -13,7 +13,7 @@ import { AuthService } from 'src/app/curso/service/auth/auth.service';
 })
 export class Resap33Component implements OnInit {
     isToggleEnabled = false;
-    // combinarData: any[] = [];
+    
     public resap33get: any;
     public auth: any; 
     private userSubscription: Subscription;
@@ -37,13 +37,13 @@ export class Resap33Component implements OnInit {
         });
 
         this.serviceResap33.getResap33AllParameter().subscribe({
-            next: (resp) => {
-                this.resap33get = resp;
+            next: (data) => {
+                this.resap33get = data; 
             },
             error: (e) => {
-                console.log('error: ', e);
+                console.error('Error al obtener resap33:', e);
             },
-        }); //--------------------------
+        });
     }
 
     ngOnInit() {
@@ -93,17 +93,4 @@ export class Resap33Component implements OnInit {
         this.filter.nativeElement.value = '';
     }
     //------------------------------------------------------------------
-
-    prueba = [
-        {
-            gestion: '2023',
-            nombre: 'andre',
-            carnet: 936452,
-        },
-        {
-            gestion: '1995',
-            nombre: 'nicolas',
-            carnet: 336478,
-        },
-    ];
 }

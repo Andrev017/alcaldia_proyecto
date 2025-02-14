@@ -25,7 +25,7 @@
             <h5>Solicitudes Llenadas </h5>
 
 
-            <p-table #dt1 [value]="llenadoSolid" [rows]="10" [rowHover]="true" styleClass="p-datatable-gridlines"
+            <p-table #dt1 [value]="resap33get" [rows]="10" [rowHover]="true" styleClass="p-datatable-gridlines"
                 [paginator]="true" [globalFilterFields]="['gestion','nombre','carnet']" responsiveLayout="scroll">
 
                 <ng-template pTemplate="caption">
@@ -37,9 +37,6 @@
                         <button pButton pRipple icon="pi pi-chart-bar" label="Generar Grafico"
                             class="p-button-success mb-2" (click)="abrirModalGrafico()"></button>
 
-                        <!-- <button pButton pRipple icon="pi pi-file-pdf" label="Generar pdf"
-                            class="p-button mb-2"></button> -->
-
 
                         <span class="p-input-icon-left mb-2">
                             <i class="pi pi-search"></i>
@@ -48,15 +45,12 @@
                         </span>
                     </div>
                     <app-generacion-grafico></app-generacion-grafico>
-                    <h5>
-                        HACER EL CAMBIO DE LOS DATOS DE LA TABLA AUTH
-                        CON LA TABLA DE EMPLEADOS
-                    </h5>
+
                 </ng-template>
 
                 <ng-template pTemplate="header">
                     <tr>
-                        <th style="min-width: 12rem">
+                        <th style="min-width: 10rem">
                             <div class="flex justify-content-between align-items-center">
                                 Gestion
                                 <p-columnFilter type="text" field="gestion" display="menu"
@@ -85,28 +79,18 @@
                     </tr>
                 </ng-template>
 
-                <ng-template pTemplate="body" let-llenadoSolid>
+                <ng-template pTemplate="body" let-item>
                     <tr>
-                        <td>
-                            {{llenadoSolid.gestion}}
-                        </td>
-                        <td>
-                            {{ auth?.emp.nombre +' '+ auth?.emp.otro_nombre +' '+
-                            auth?.emp.paterno + ' ' +auth?.emp.materno }}
-                            <!-- {{llenadoSolid.nombre}} -->
-                        </td>
-                        <td>
-                            {{ auth?.emp.ci }}
-                            <!-- {{llenadoSolid.carnet}} -->
-                        </td>
-                        <td class="text-center">
-                            <!-- <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success m-1"
-                                title="Editar"></button> -->
+                        <td>{{ item.gestion }}</td>
 
+                        <td>{{ auth?.emp.nombre +' '+ auth?.emp.otro_nombre +' '+ auth?.emp.paterno + ' '
+                            +auth?.emp.materno }}</td>
+
+                        <td>{{ auth?.emp.ci }}</td>
+
+                        <td class="text-center">
                             <button pButton pRipple icon="pi pi-file-pdf" title="Generar PDF"
                                 class="p-button-rounded p-button m-1" (click)="abrirModalGrafico()"></button>
-
-
                         </td>
                     </tr>
                     <br>

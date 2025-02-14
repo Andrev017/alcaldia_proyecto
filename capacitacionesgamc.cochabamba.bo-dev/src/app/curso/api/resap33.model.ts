@@ -22,6 +22,7 @@ export interface Resap33 {
     direccion:              string;
     activo:                 string;
     updatedAt:              Date;
+    gestion:                number;
     id_empleado:            number;
     // empelado_resap33:       EmpleadoResap33;
 }

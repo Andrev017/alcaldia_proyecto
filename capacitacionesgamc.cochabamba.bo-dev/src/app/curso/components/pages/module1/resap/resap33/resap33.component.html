@@ -18,7 +18,7 @@
 
             <!-- ----------------------- PARTE DE LA TABLA ---------------------------  -->
             <h5>Registros Realizados por Gestión</h5>
-            <p-table #dt1 [value]="prueba" [rows]="10" [rowHover]="true" styleClass="p-datatable-gridlines"
+            <p-table #dt1 [value]="resap33get" [rows]="10" [rowHover]="true" styleClass="p-datatable-gridlines"
                 [paginator]="true" [globalFilterFields]="['registro', 'gestion']" responsiveLayout="scroll">
 
                 <ng-template pTemplate="caption">
@@ -60,7 +60,7 @@
                     </tr>
                 </ng-template>
 
-                <ng-template pTemplate="body" let-prueba>
+                <ng-template pTemplate="body" let-item>
                     <tr>
                         <td>
                             {{ auth?.emp.nombre +' '+ auth?.emp.otro_nombre +' '+
@@ -68,12 +68,10 @@
                         </td>
                     
                         <td>
-                            {{resap33get.secretaria}} 
+                            {{item.gestion}} 
                         </td>
-                        <td class="text-center">
-                            <!-- <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-success m-1"
-                                title="Ver" (click)="verRegistro()"></button> -->
 
+                        <td class="text-center">
                             <button pButton icon="pi pi-file-pdf" class="p-button-rounded p-button m-1"
                                 title="Descargar PDF" (click)="generarPDF()"></button>
                         </td>
@@ -91,12 +89,8 @@
                         <td colspan="8">Cargando los datos.</td>
                     </tr>
                 </ng-template>
-
-
             </p-table>
-
-
-
+            
         </div>
     </div>
 </div>
